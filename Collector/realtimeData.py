@@ -1,34 +1,29 @@
-import datetime
-import time as T
-
-from yahoo_finance import Share
+from iqfeed import historicData
 from pymongo import MongoClient
-from pymongo import errors
 
-def get_realtimeData(cName, collection):
-    stock = Share(cName)
-    collection.create_index('datetime', unique = True)
-    post = {'datetime':stock.get_trade_datetime(), 'price':stock.get_price(),
-            'Volume':stock.get_volume()}
-    try:
-    	collection.insert_one(post)
-    except errors.DuplicateKeyError:
-    	print datetime.datetime.now()
+import datetime
 
+dateStart = datetime.datetime(2017,2,27)
+dateEnd = datetime.datetime(2017,2,27)     
+
+iq = historicData(dateStart, dateEnd, 60)
 
 dbClient = MongoClient()
 db = dbClient.StockRealtime
 
-now = datetime.datetime.now()
-
-# beginTime = now.replace(hour=9, minute=0, second=0, microsecond=0)
-# endTime = now.replace(hour=16, minute=0, second=0, microsecond=0)
 stockList = ['YHOO', 'GOOG', 'AAPL', 'BIDU', 'BABA']
-# while now > beginTime and now < endTime:
-for i in stockList:
-	db[i].remove()
-while 1:
-    for stock in stockList:
-        get_realtimeData(stock, db[stock])
-    print ++1
-    T.sleep(59.30)
+
+for stock in stockList:
+    db[stock].remove()
+    stockData = iq.download_symbol(stock)
+    # stockData = stockData.to_dict()
+    stockData = stockData.split(',')
+    transData = []
+    while stockData:
+        temp = []
+        for i in range(7):
+            temp.append(stockData.pop(0))
+        transData.append(temp)
+    for item in transData:
+        post = {'datetime':item[0], 'price':float(item[4]), 'Volume':int(item[5])}
+        db[stock].insert_one(post)
