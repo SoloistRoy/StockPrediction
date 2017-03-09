@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Stock Prediction</title>
-    <link rel="stylesheet" type="text/css" href="css/styles.css" />
-    <script src="node_modules/angular/angular.js"></script>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}" />
+    <script src="{{url_for('static', filename='node_modules/angular/angular.js')}}"></script>
   </head>
 
   <body>
@@ -47,6 +47,6 @@
 
     </div> <!-- /container -->
 
-    <script type="text/javascript" src="js/app.js"></script>
+    <script type="/text/javascript" src="{{url_for('static', filename='js/app.js')}}"></script>
   </body>
 </html>
