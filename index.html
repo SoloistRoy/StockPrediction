@@ -37,7 +37,13 @@
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron text-center" >
         <h1>Stock Prediction</h1>
-        <input type="text" ng-model="testAngularJS">
+        <form method=POST action="{{ url_for('query') }}">
+        	<input type="text" class="form-control" name="stockName" placeholder="Stock Name">
+        	<!-- <button type="submit" ng-click="buttonClicked()">Click</button> -->
+        	<button type="submit" class="btn btn-primary btn-block">Click</button>
+        </form>
+        <hr>
+        	{{modText}}
         <p>{{testAngularJS}}</p>
       </div>
 
