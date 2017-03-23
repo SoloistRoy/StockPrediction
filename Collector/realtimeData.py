@@ -6,7 +6,7 @@ import datetime
 dateStart = datetime.datetime(2017,2,27)
 dateEnd = datetime.datetime(2017,3,2)     
 
-iq = historicData(dateStart, dateEnd, 60)
+iq = historicData(dateStart, dateEnd, 60) #last parameter is the time gap between 2 reads
 
 dbClient = MongoClient()
 dbClient.drop_database('StockRealtime')
