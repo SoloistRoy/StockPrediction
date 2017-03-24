@@ -35,18 +35,22 @@
       </div>
     </nav>
 
-    <div class="container">
+    <div class="jumbotron container">
 
       <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron text-center" ng-controller="myCtrl">
-        <h1>Stock Prediction</h1>
-        <!--<form method=POST action="{{ url_for('query') }}">-->
-        	<input type="text" class="form-control" name="stockName" placeholder="Stock Name" ng-model="inputStockName">
-        	 <button type="submit" class="btn btn-primary btn-block" ng-click="buttonClicked()">Get Price</button> 
-        	<!--<button type="submit" class="btn btn-primary btn-block">Click</button>-->
-        <!--</form>-->
-        <hr>
-        <p>//stockPrice//</p>
+      <div class="text-center" ng-controller="myCtrl">
+        <h2>Stock Prediction</h2>
+          <div class="col-md-6">
+          <!--<form method=POST action="{{ url_for('query') }}">-->
+            <input type="text" class="form-control" name="stockName" placeholder="Stock Name" ng-model="inputStockName">
+            <br>
+            <button type="submit" class="btn btn-primary btn-prime" ng-click="buttonClicked()">Get Price</button> 
+            <!--<button type="submit" class="btn btn-primary btn-block">Click</button>-->
+          <!--</form>-->
+        </div>
+        <div class="col-md-6">
+          <p>//stockPrice//</p>
+        </div>
       </div>
 
       <footer>

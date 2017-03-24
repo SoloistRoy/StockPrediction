@@ -17,6 +17,7 @@ var app = angular.module('main', [])
     });
 
 app.controller('myCtrl', function($scope, $http) {
+    $scope.stockPrice = "Stock Price";
 
     $scope.buttonClicked = function() {
         $http({
