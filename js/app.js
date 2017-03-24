@@ -15,39 +15,22 @@ var app = angular.module('main', [])
     app.config(function($interpolateProvider) {
         $interpolateProvider.startSymbol('//').endSymbol('//');
     });
-    app.controller('myCtrl', ['$scope', function($scope) {
-        $scope.buttonClicked = function() {
-            console.log('from controller');
-        }
-        $scope.stockPrice1 = "xxx";
-    }]);
 
-// var app = angular.module('main', [])
-//     .config(function($interpolateProvider) {
-//     $interpolateProvider.startSymbol('//');
-//     $interpolateProvider.endSymbol('//');
-//   })
-// app.controller('controller', ['$scope',function($scope, $http) {
+app.controller('myCtrl', function($scope, $http) {
 
-//     $scope.stockPrice1 = "xxx";
+    $scope.buttonClicked = function() {
+        $http({
+                method: 'POST',
+                url: '/query',
+                data: {
+                    stockName: $scope.inputStockName
+                }
+            }).then(function(response) {
+                console.log(response);
+                $scope.stockPrice = response.data;
+            }, function(error) {
+                console.log(error);
+            });
+    }
 
-//     $scope.buttonClicked = function() {
-//         $http({
-//                 method: 'POST',
-//                 url: '/query',
-//                 data: {
-//                     stockName: $scope.inputStockName
-//                 }
-//             }).then(function(response) {
-//                 $scope.stockPrice = response;
-//             }, function(error) {
-//                 console.log(error);
-//             });
-//     }
-
-// }]);
-function onclick(){
-    console.log('------------------------------------');
-    console.log("from js");
-    console.log('------------------------------------');
-}
+});
