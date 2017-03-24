@@ -1,7 +1,8 @@
 from flask import Flask, render_template, url_for, request, session, redirect
 from flask_pymongo import PyMongo
 
-app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
+# app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
+app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/StockPrediction')
 app.config['MONGO_DBNAME'] = 'StockAnnual'
 app.config['MONGO_URI'] = 'mongodb://localhost/StockAnnual'
 app.config['SECRET_KEY'] = 'super secret key'
@@ -22,12 +23,14 @@ def index():
 
 @app.route('/query', methods=['POST'])
 def query():
-	stockName = request.form['stockName']
+	# stockName = request.form['stockName']
+	print(request.json)
+	stockName = request.json['stockName']
 	stock = mongo.db[stockName]
 	m = stock.find({})
 	session['piece'] = m[0][u'high']
-	return redirect(url_for('index'))
-	# return str(m[4][u'high'])
+	# return redirect(url_for('index'))
+	return str(m[4][u'high'])
 
 if __name__ == '__main__':
 	app.debug = True

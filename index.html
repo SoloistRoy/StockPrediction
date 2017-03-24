@@ -7,7 +7,10 @@
 
     <title>Stock Prediction</title>
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}" />
+    <script type="/text/javascript" src="{{url_for('static', filename='js/app.js')}}"></script>
     <script src="{{url_for('static', filename='node_modules/angular/angular.js')}}"></script>
+    <script src="{{url_for('static', filename='js/controllers.js')}}"></script>
+
   </head>
 
   <body>
@@ -35,16 +38,15 @@
     <div class="container">
 
       <!-- Main component for a primary marketing message or call to action -->
-      <div class="jumbotron text-center" >
+      <div class="jumbotron text-center" ng-controller="myCtrl">
         <h1>Stock Prediction</h1>
-        <form method=POST action="{{ url_for('query') }}">
-        	<input type="text" class="form-control" name="stockName" placeholder="Stock Name">
-        	<!-- <button type="submit" ng-click="buttonClicked()">Click</button> -->
-        	<button type="submit" class="btn btn-primary btn-block">Click</button>
-        </form>
+        <!--<form method=POST action="{{ url_for('query') }}">-->
+        	<input type="text" class="form-control" name="stockName" placeholder="Stock Name" ng-model="inputStockName">
+        	 <button type="submit" class="btn btn-primary btn-block" ng-click="buttonClicked()">Get Price</button> 
+        	<!--<button type="submit" class="btn btn-primary btn-block">Click</button>-->
+        <!--</form>-->
         <hr>
-        	{{modText}}
-        <p>{{testAngularJS}}</p>
+        <p>//stockPrice//</p>
       </div>
 
       <footer>
@@ -53,6 +55,5 @@
 
     </div> <!-- /container -->
 
-    <script type="/text/javascript" src="{{url_for('static', filename='js/app.js')}}"></script>
   </body>
 </html>
