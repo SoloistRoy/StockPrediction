@@ -7,7 +7,7 @@
     "url": "https://github.com/SoloistRoy/StockPrediction"
   },
   "dependencies": {
-    "angular": "^1.6.2",
+    "angular": "^1.6.3",
     "bootstrap": "^3.3.6",
     "grunt": "^0.4.5",
     "grunt-contrib-concat": "^0.5.1",
@@ -16,5 +16,9 @@
     "grunt-contrib-less": "^1.1.0",
     "grunt-contrib-watch": "^0.6.1",
     "jquery": "^2.1.4"
+  },
+  "devDependencies": {
+    "angular-route": "^1.6.3",
+    "angular-ui-router": "^0.4.2"
   }
 }

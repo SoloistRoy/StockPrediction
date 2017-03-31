@@ -1,9 +1,12 @@
-var app = angular.module('main', [])
-    app.config(function($interpolateProvider) {
+'use strict';
+
+var app = angular.module('main', ['ngRoute']);
+
+app.config(function($interpolateProvider) {
         $interpolateProvider.startSymbol('//').endSymbol('//');
     });
 
-app.controller('myCtrl', function($scope, $http) {
+app.controller('mainController', function($scope, $http) {
     $scope.stockPrice = "Stock Price";
 
     $scope.buttonClicked = function() {

@@ -6,14 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Stock Prediction</title>
+
+    <!--load css and js files-->
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}" />
     <script type="/text/javascript" src="{{url_for('static', filename='js/app.js')}}"></script>
-    <script src="{{url_for('static', filename='node_modules/angular/angular.js')}}"></script>
-    <script src="{{url_for('static', filename='js/controllers.js')}}"></script>
 
+    <!-- load angular, angular route and controller  -->
+    <script src="{{url_for('static', filename='node_modules/angular/angular.js')}}"></script>
+    <script src="{{url_for('static', filename='node_modules/angular-route/angular-route.min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/controllers.js')}}"></script>
+    <script src="{{url_for('static', filename='js/routing.js')}}"></script>
+    <base href="/">
   </head>
 
-  <body>
+  <body ng-controller="mainController">
 
     <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
@@ -25,11 +31,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">StockPrediction</a>
+          <a class="navbar-brand" ng-class="{'active': $route.current.activetab == 'home'}" href="home">Stock Prediction</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#">Home</a></li>
+            <li ng-class="{'active': $route.current.activetab == 'historical'}"><a href="historical">Historical Data</a></li>
+            <li ng-class="{'active': $route.current.activetab == 'prediction'}"><a href="prediction">Prediction</a></li>
+            <li ng-class="{'active': $route.current.activetab == 'groupinfo'}"><a href="groupinfo">Group Member</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -37,27 +45,14 @@
 
     <div class="jumbotron container">
 
-      <!-- Main component for a primary marketing message or call to action -->
-      <div class="text-center" ng-controller="myCtrl">
-        <h2>Stock Prediction</h2>
-          <div class="col-md-6">
-          <!--<form method=POST action="{{ url_for('query') }}">-->
-            <input type="text" class="form-control" name="stockName" placeholder="Stock Name" ng-model="inputStockName">
-            <br>
-            <button type="submit" class="btn btn-primary btn-prime" ng-click="buttonClicked()">Get Price</button> 
-            <!--<button type="submit" class="btn btn-primary btn-block">Click</button>-->
-          <!--</form>-->
-        </div>
-        <div class="col-md-6">
-          <p>//stockPrice//</p>
-        </div>
-      </div>
-
-      <footer>
-        <p></p>
-      </footer>
-
+      <!-- angular templating -->
+      <!-- this is where content will be injected -->
+      <ng-view></ng-view>
+      //StockPrice//
     </div> <!-- /container -->
 
+    <footer>
+      <p></p>
+    </footer>
   </body>
 </html>
