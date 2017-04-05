@@ -4,7 +4,7 @@ module.exports = function(grunt) {
 		concat: {
 		    dist: {
 		      src: ['node_modules/jquery/dist/jquery.min.js','node_modules/bootstrap/dist/js/bootstrap.min.js','js/**','!js/app.js'],
-		      dest: 'js/app.js',
+		      dest: 'public/js/app.js',
 		    }
 		},
 		watch: {
@@ -12,11 +12,11 @@ module.exports = function(grunt) {
 				livereload: true
 			},
 			scripts: {
-				files: ['js/**','!js/app.js'],
+				files: ['public/js/**','!js/app.js'],
 				tasks: ['concat']
 			},
 			bootstrap: {
-				files: ['less/**'],
+				files: ['public/less/**'],
 				tasks: ['less','cssmin']
 			},
 			templates: {
@@ -30,9 +30,9 @@ module.exports = function(grunt) {
 			target: {
 				files: [{
 					expand: true,
-					cwd: 'css/',
+					cwd: 'public/css/',
 					src: 'styles.css',
-					dest: 'css/',
+					dest: 'public/css/',
 					ext: '.min.css'
 				}]
 			}
@@ -51,8 +51,8 @@ module.exports = function(grunt) {
 		        options: {
 		          strictMath: true
 		        },
-		        src: 'less/styles.less',
-		        dest: 'css/styles.css'
+		        src: 'public/less/styles.less',
+		        dest: 'public/css/styles.css'
 			}
 		}
 	});

@@ -7,19 +7,32 @@
 
     <title>Stock Prediction</title>
 
-    <!--load css and js files-->
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}" />
-    <script type="/text/javascript" src="{{url_for('static', filename='js/app.js')}}"></script>
+    <!-- load css and js files -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='public/css/styles.css')}}" />
+    <script type="/text/javascript" src="{{url_for('static', filename='public/js/app.js')}}"></script>
+
+    <!-- favicons -->
+    <link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{url_for('static', filename='public/favicons/apple-touch-icon-57x57.png')}}" />
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{url_for('static', filename='public/favicons/apple-touch-icon-114x114.png')}}" />
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{url_for('static', filename='public/favicons/apple-touch-icon-72x72.png')}}" />
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{url_for('static', filename='public/favicons/apple-touch-icon-144x144.png')}}" />
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="{{url_for('static', filename='public/favicons/apple-touch-icon-120x120.png')}}" />
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="{{url_for('static', filename='public/favicons/apple-touch-icon-152x152.png')}}" />
+    <link rel="icon" type="image/png" href="{{url_for('static', filename='public/favicons/favicon-32x32.png')}}" sizes="32x32" />
+    <link rel="icon" type="image/png" href="{{url_for('static', filename='public/favicons/favicon-16x16.png')}}" sizes="16x16" />
+    <meta name="application-name" content="StockPrediction"/>
+    <meta name="msapplication-TileColor" content="#FFFFFF" />
+    <meta name="msapplication-TileImage" content="{{url_for('static', filename='public/favicons/mstile-144x144.png')}}'" />
 
     <!-- load angular, angular route and controller  -->
     <script src="{{url_for('static', filename='node_modules/angular/angular.js')}}"></script>
     <script src="{{url_for('static', filename='node_modules/angular-route/angular-route.min.js')}}"></script>
-    <script src="{{url_for('static', filename='js/controllers.js')}}"></script>
-    <script src="{{url_for('static', filename='js/routing.js')}}"></script>
+    <script src="{{url_for('static', filename='public/js/controllers.js')}}"></script>
+    <script src="{{url_for('static', filename='public/js/routing.js')}}"></script>
     <base href="/">
   </head>
 
-  <body ng-controller="mainController">
+  <body>
 
     <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-inverse navbar-fixed-top">
@@ -47,12 +60,21 @@
 
       <!-- angular templating -->
       <!-- this is where content will be injected -->
-      <ng-view></ng-view>
+      <div ng-view></div>
       //StockPrice//
     </div> <!-- /container -->
 
     <footer>
       <p></p>
     </footer>
+    
+    <!-- Include Required Prerequisites -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+
+    <!-- Include Date Range Picker -->
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
+
   </body>
 </html>

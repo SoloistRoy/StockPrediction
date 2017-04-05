@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, request, session, redirect
 from flask_pymongo import PyMongo
 
 # app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
-app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/StockPrediction')
+app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
 app.config['MONGO_DBNAME'] = 'StockAnnual'
 app.config['MONGO_URI'] = 'mongodb://localhost/StockAnnual'
 app.config['SECRET_KEY'] = 'super secret key'

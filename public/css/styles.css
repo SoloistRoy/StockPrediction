@@ -7469,3 +7469,8 @@ body {
 #rh-logo {
   width: 50px;
 }
+.bordered {
+  border: 1px 1px 1px 1px;
+  border-radius: 1rem;
+  border-color: #bbbbbb;
+}
