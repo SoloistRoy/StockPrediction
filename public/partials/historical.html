@@ -3,21 +3,26 @@
 
     <div class="row">
         <div class="col-lg-2">
-            <select class="form-control" id="select">
-                <option selected disabled>Select a company</option>
+            <select class="form-control" id="select" ng-model="stockName" ng-options="stock.name disable when stock.notAnOption for stock in stocks">
+                <!--<option selected disabled>Select a company</option>
                 <option value="AAPL">Apple</option>
                 <option value="BABA">Alibaba Group</option>
                 <option value="BIDU">Baidu</option>
                 <option value="YHOO">Yahoo</option>
-                <option value="GOOG">Google</option>
+                <option value="GOOG">Google</option>-->
             </select>
         </div>
         <div class="col-lg-3">
             <div class="input-group">
-                <input type="text" name="daterange" class="form-control" value="02/01/2016 - 02/01/2017" id="date1"/>
+                <input type="text" name="daterange" class="form-control" placeholder="02/01/2016 - 02/01/2017" id="date1" ng-model="dateRange1"/>
                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
             </div>
         </div>
+        <div class="col-lg-2">
+            <button type="submit" class="btn btn-sm btn-success" ng-click="hisQuery()">Apply</button>
+        </div>
     </div>
-
+    <div class="row">
+        <div>//stockData//</div>
+    </div>
 </div>

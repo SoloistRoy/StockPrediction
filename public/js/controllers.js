@@ -7,8 +7,8 @@ app.config(function($interpolateProvider) {
     });
 
 app.controller('mainController', function($scope, $http) {
+    //Test module
     $scope.stockPrice = "Stock Price";
-
     $scope.buttonClicked = function() {
         $http({
                 method: 'POST',
@@ -27,6 +27,17 @@ app.controller('mainController', function($scope, $http) {
 });
 
 app.controller('hisController', function($scope, $http, $filter) {
+    var date
+    $scope.stocks = [{name: 'Select a Company', value: '', notAnOption: true},
+                    {name: 'Apple', value: 'AAPL'},
+                    {name : 'Alibaba', value: 'BABA'},
+                    {name : 'Baidu', value: 'BIDU'},
+                    {name : 'Yahoo', value: 'YHOO'},
+                    {name: 'Google', value: 'GOOG'}];
+
+    $scope.stockName = $scope.stocks[0];
+    
+    //Load datepicker
     $scope.load = function() {
         $('input[name="daterange"]').daterangepicker({
         "startDate": "02/01/2016",
@@ -38,6 +49,27 @@ app.controller('hisController', function($scope, $http, $filter) {
     });
    };
     $scope.load();
+
+    //Historical data query
+    $scope.hisQuery = function() {
+        console.log('------------------------------------');
+        console.log($scope.stockName.value + $scope.dateRange1);
+        console.log('------------------------------------');
+        $http({
+                method: 'POST',
+                url: '/hisData',
+                data: {
+                    stockName: $scope.stockName.value,
+                    dateRange: $scope.dateRange1
+                }
+            }).then(function(response) {
+                console.log(response);
+                $scope.stockData = response.data;
+            }, function(error) {
+                console.log(error);
+            });
+    }
+
 });
 
 app.controller('preController', function($scope, $http) {

@@ -1,5 +1,7 @@
 from flask import Flask, render_template, url_for, request, session, redirect
 from flask_pymongo import PyMongo
+import json
+import historicalServer as historical
 
 # app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
 app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
@@ -24,7 +26,7 @@ def index():
 @app.route('/query', methods=['POST'])
 def query():
 	# stockName = request.form['stockName']
-	print(request.json)
+	print request.json
 	stockName = request.json['stockName']
 	stock = mongo.db[stockName]
 	m = stock.find({})
@@ -35,3 +37,16 @@ def query():
 if __name__ == '__main__':
 	app.debug = True
 	app.run()
+
+@app.route('/hisData', methods=['POST'])
+def hisQuery():
+	data = request.data
+	dataDict = json.loads(data)
+	stockName = dataDict['stockName']
+	dateRange = dataDict['dateRange']
+	print stockName, dateRange
+	stock = mongo.db[stockName]
+	print stock.find({})
+	
+	historicalData = historical.getHisData(stockName, dateRange, stock)
+	return str(historicalData)
