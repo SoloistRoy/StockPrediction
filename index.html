@@ -7,10 +7,6 @@
 
     <title>Stock Prediction</title>
 
-    <!-- load css and js files -->
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='public/css/styles.css')}}" />
-    <script type="/text/javascript" src="{{url_for('static', filename='public/js/app.js')}}"></script>
-
     <!-- favicons -->
     <link rel="apple-touch-icon-precomposed" sizes="57x57" href="{{url_for('static', filename='public/favicons/apple-touch-icon-57x57.png')}}" />
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{url_for('static', filename='public/favicons/apple-touch-icon-114x114.png')}}" />
@@ -23,12 +19,11 @@
     <meta name="application-name" content="StockPrediction"/>
     <meta name="msapplication-TileColor" content="#FFFFFF" />
     <meta name="msapplication-TileImage" content="{{url_for('static', filename='public/favicons/mstile-144x144.png')}}'" />
-
-    <!-- load angular, angular route and controller  -->
-    <script src="{{url_for('static', filename='node_modules/angular/angular.js')}}"></script>
-    <script src="{{url_for('static', filename='node_modules/angular-route/angular-route.min.js')}}"></script>
-    <script src="{{url_for('static', filename='public/js/controllers.js')}}"></script>
-    <script src="{{url_for('static', filename='public/js/routing.js')}}"></script>
+    
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
     <base href="/">
   </head>
 
@@ -65,16 +60,21 @@
     </div> <!-- /container -->
 
     <footer>
-      <p></p>
     </footer>
     
-    <!-- Include Required Prerequisites -->
-    <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script>
-    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    
+    <!-- load css and js files -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='public/css/styles.css')}}" />
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='node_modules/bootstrap-daterangepicker/daterangepicker.css')}}" />
+    <script src="{{url_for('static', filename='public/js/app.js')}}"></script>
+    <script src="{{url_for('static', filename='node_modules/angular/angular.js')}}"></script>
+    <script src="{{url_for('static', filename='node_modules/bootstrap-daterangepicker/moment.min.js')}}"></script>    
+    <script src="{{url_for('static', filename='node_modules/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
 
-    <!-- Include Date Range Picker -->
-    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
-    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
-
+    <!-- load angular route and controller  -->
+    <script src="{{url_for('static', filename='node_modules/angular-route/angular-route.min.js')}}"></script>
+    <script src="{{url_for('static', filename='public/js/controllers.js')}}"></script>
+    <script src="{{url_for('static', filename='public/js/routing.js')}}"></script>
+   
   </body>
 </html>

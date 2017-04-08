@@ -20,7 +20,7 @@ module.exports = function(grunt) {
 				tasks: ['less','cssmin']
 			},
 			templates: {
-				files: ['templates/*']
+				files: ['public/partials/*']
 			},
 			index: {
 				files: ['index.html']
@@ -54,11 +54,34 @@ module.exports = function(grunt) {
 		        src: 'public/less/styles.less',
 		        dest: 'public/css/styles.css'
 			}
+		},
+		cacheBust: {
+			options: {
+				assets: ['assets/**/*'],
+				baseDir: './public/'
+			},
+			taskName: {
+				files: [{   
+					expand: true,
+					cwd: 'public/',
+					src: ['public/partials/*.html', 'assets/**/*']
+				}]
+			}
+		},
+		assets: {
+			options: {
+				baseDir: 'public/',
+			},
+			files: [{   
+				expand: true,
+				cwd: 'public/',
+				src: ['public/**/*.html']
+			}]
 		}
 	});
 
 	grunt.registerTask('server', ['concat','less','cssmin','connect','watch']);
-	grunt.registerTask('default', ['concat','less','cssmin']);
+	grunt.registerTask('default', ['concat','less','cssmin', 'watch']);
 
 	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-contrib-watch');
