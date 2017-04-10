@@ -21,8 +21,8 @@
     <meta name="msapplication-TileImage" content="{{url_for('static', filename='public/favicons/mstile-144x144.png')}}'" />
     
     <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+      <script src="excanvas.js"></script>
+      <script src="es5-shim.js"></script>
     <![endif]-->
     <base href="/">
   </head>
@@ -70,10 +70,13 @@
     <script src="{{url_for('static', filename='node_modules/angular/angular.js')}}"></script>
     <script src="{{url_for('static', filename='node_modules/bootstrap-daterangepicker/moment.min.js')}}"></script>    
     <script src="{{url_for('static', filename='node_modules/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
+    <script src="{{url_for('static', filename='node_modules/chart.js/dist/chart.min.js')}}"></script>
+    <script src="{{url_for('static', filename='node_modules/angular-chart.js/dist/angular-chart.min.js')}}"></script>
 
-    <!-- load angular route and controller  -->
+    <!-- load angular route, controller and js files  -->
     <script src="{{url_for('static', filename='node_modules/angular-route/angular-route.min.js')}}"></script>
     <script src="{{url_for('static', filename='public/js/controllers.js')}}"></script>
+    <script src="{{url_for('static', filename='public/js/stockchart.js')}}"></script>
     <script src="{{url_for('static', filename='public/js/routing.js')}}"></script>
    
   </body>

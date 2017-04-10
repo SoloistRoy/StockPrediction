@@ -1,10 +1,22 @@
 'use strict';
 
-var app = angular.module('main', ['ngRoute']);
+var app = angular.module('main', ['ngRoute', 'chart.js']);
 
 app.config(function($interpolateProvider) {
         $interpolateProvider.startSymbol('//').endSymbol('//');
     });
+//Chart configuration
+app.config(['ChartJsProvider', function (ChartJsProvider) {
+    // Configure all charts
+    ChartJsProvider.setOptions({
+      chartColors: ['#FF5252', '#FF8A80'],
+      responsive: true
+    });
+    // Configure all line charts
+    ChartJsProvider.setOptions('line', {
+      showLines: false
+    });
+  }])
 
 app.controller('mainController', function($scope, $http) {
     //Test module
@@ -26,8 +38,7 @@ app.controller('mainController', function($scope, $http) {
 
 });
 
-app.controller('hisController', function($scope, $http, $filter) {
-    var date
+app.controller('hisController', ['$scope', '$timeout', function($scope, $http, $filter, $timeout) {
     $scope.stocks = [{name: 'Select a Company', value: '', notAnOption: true},
                     {name: 'Apple', value: 'AAPL'},
                     {name : 'Alibaba', value: 'BABA'},
@@ -70,7 +81,26 @@ app.controller('hisController', function($scope, $http, $filter) {
             });
     }
 
-});
+    //Stock chart
+    $scope.labels = ["January", "February", "March", "April", "May", "June", "July"];
+    $scope.series = ['Series A', 'Series B'];
+    $scope.data = [
+        [65, 59, 80, 81, 56, 55, 40],
+        [28, 48, 40, 19, 86, 27, 90]
+    ];
+    $scope.onClick = function (points, evt) {
+        console.log(points, evt);
+    };
+    
+    // Simulate async data update
+    // $timeout(function () {
+    //     $scope.data = [
+    //     [28, 48, 40, 19, 86, 27, 90],
+    //     [65, 59, 80, 81, 56, 55, 40]
+    //     ];
+    // }, 3000);
+
+}]);
 
 app.controller('preController', function($scope, $http) {
 

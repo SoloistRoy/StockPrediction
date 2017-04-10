@@ -8,7 +8,9 @@
   },
   "dependencies": {
     "angular": "^1.6.3",
+    "angular-chart.js": "^1.1.1",
     "bootstrap": "^3.3.6",
+    "chart.js": "^2.5.0",
     "grunt": "^0.4.5",
     "grunt-clearcache": "0.0.4",
     "grunt-contrib-concat": "^0.5.1",
