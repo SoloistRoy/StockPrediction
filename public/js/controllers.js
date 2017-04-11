@@ -30,7 +30,10 @@ app.controller('mainController', function($scope, $http) {
                 }
             }).then(function(response) {
                 console.log(response);
-                $scope.stockPrice = response.data;
+                // pass data in json, a[0]: one piece, a[1]: json data
+                var a = response.data;
+                var data = a[1]
+                $scope.stockPrice = a[1];
             }, function(error) {
                 console.log(error);
             });
