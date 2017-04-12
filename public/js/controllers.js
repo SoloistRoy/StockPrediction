@@ -1,6 +1,6 @@
 // written by: Jingyuan Li
-// assisted by:
-// debugged by: Jingyuan Li
+// assisted by: Yiran Sun
+// debugged by: Jingyuan Li, Yiran Sun
 'use strict';
 
 var app = angular.module('main', ['ngRoute', 'chart.js']);
@@ -10,47 +10,26 @@ var app = angular.module('main', ['ngRoute', 'chart.js']);
 app.config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('//').endSymbol('//');
 });
-//Chart configuration
-// app.config(['ChartJsProvider', function (ChartJsProvider) {
-//     // Configure all charts
-//     ChartJsProvider.setOptions({
-//         chartColors: ['#4caf50', '#0c7cd5'],
-//         type: ['line', 'bar'],
-//         responsive: true,
-//         scales: {
-//             yAxes: [{
-//                 type: "linear",
-//                 position: "left",
-//                 id: "y-axis-1",
-//             }, {
-//                 type: "linear",
-//                 position: "right",
-//                 id: "y-axis-2",
-//             }],
-//         }
-//     });
-//     // Configure all line charts
-//     ChartJsProvider.setOptions('line', {
-//         showLines: true
-//     });
-// }])
 
 app.controller('mainController', function ($scope, $http) {
     //Test module
     $scope.stockPrice = "Stock Price";
     $scope.buttonClicked = function () {
         $http({
-            method: 'POST',
-            url: '/query',
-            data: {
-                stockName: $scope.inputStockName
-            }
-        }).then(function (response) {
-            console.log(response);
-            $scope.stockPrice = response.data;
-        }, function (error) {
-            console.log(error);
-        });
+                method: 'POST',
+                url: '/query',
+                data: {
+                    stockName: $scope.inputStockName
+                }
+            }).then(function(response) {
+                console.log(response);
+                // pass data in json, a[0]: one piece, a[1]: json data
+                var a = response.data;
+                var data = a[1]
+                $scope.stockPrice = a[1];
+            }, function(error) {
+                console.log(error);
+            });
     }
 
 });
@@ -106,9 +85,7 @@ app.controller('hisController', function ($scope, $http, $filter, $timeout) {
                     datasets: [{
                         type: 'line',
                         label: 'Price',
-                        // xAxisID: 'Time',
                         yAxisID: 'A',
-                        // yAxesGroup: 'price',
                         fill: false,
                         borderJoinStyle: 'bevel',
                         lineTension: 0,
@@ -120,16 +97,12 @@ app.controller('hisController', function ($scope, $http, $filter, $timeout) {
                         pointHoverBorderWidth: 2,
                         pointHoverRadius: 6,
                         pointHoverBorderColor: '#f9f9f9',
-                        // pointBorderColor: '#4caf50',
-                        // pointRadius: '2',
                         data: [stockPrice]
                     },
                     {
                         type: 'bar',
                         label: 'Volume',
-                        // xAxisID: 'Time',
                         yAxisID: 'B',
-                        // yAxesGroup: 'volume',
                         borderColor: '#0c7cd5',
                         hoverBorderColor: '#0c7cd5',
                         hoverBorderWidth: 2,
@@ -211,10 +184,6 @@ app.controller('hisController', function ($scope, $http, $filter, $timeout) {
                 console.log(stockPrice);
                 console.log('------------------------------------');
             }
-            //Stock chart data(angular)
-            // $scope.labels = stockTime;
-            // $scope.series = ['Price', 'Volume'];
-            // $scope.chartdata = [stockPrice, stockVolume];
             console.log('============================');
             console.log();
 
@@ -230,28 +199,10 @@ app.controller('hisController', function ($scope, $http, $filter, $timeout) {
             hisChart.data.datasets[1].data = stockVolume;
             hisChart.data.labels = stockTime;
             hisChart.update();
-            // ctx.data.datasets[0].data = stockVolume;
-            // ctx.data.labels = stockTime;
-            // ctx.update();
         }, function (error) {
             console.log(error);
         });
     }
-
-
-
-    // $scope.onClick = function (points, evt) {
-    //     console.log(points, evt);
-    // };
-
-    // Simulate async data update
-    // $timeout(function () {
-    //     $scope.data = [
-    //     [28, 48, 40, 19, 86, 27, 90],
-    //     [65, 59, 80, 81, 56, 55, 40]
-    //     ];
-    // }, 3000);
-
 });
 
 app.controller('preController', function ($scope, $http) {
