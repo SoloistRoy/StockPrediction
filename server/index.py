@@ -41,12 +41,15 @@ if __name__ == '__main__':
 @app.route('/hisData', methods=['POST'])
 def hisQuery():
 	data = request.data
+	print data
 	dataDict = json.loads(data)
+	print dataDict
 	stockName = dataDict['stockName']
 	dateRange = dataDict['dateRange']
 	print stockName, dateRange
 	stock = mongo.db[stockName]
-	print stock.find({})
+	# print stock.find({})
 	
 	historicalData = historical.getHisData(stockName, dateRange, stock)
+	print historicalData
 	return str(historicalData)
