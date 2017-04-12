@@ -1,3 +1,6 @@
+// written by: Jingyuan Li
+// assisted by:
+// debugged by: Jingyuan Li
 app.config(function($routeProvider, $locationProvider){
     $locationProvider.html5Mode(true);
     $routeProvider

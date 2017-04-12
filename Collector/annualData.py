@@ -1,3 +1,6 @@
+# written by: Yiran Sun
+# assisted by:
+# debugged by: Yiran Sun
 from yahoo_finance import Share
 from pymongo import MongoClient
 

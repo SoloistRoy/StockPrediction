@@ -1,3 +1,6 @@
+// written by: Jingyuan Li
+// assisted by:
+// debugged by: Jingyuan Li
 'use strict';
 
 var app = angular.module('main', ['ngRoute', 'chart.js']);
@@ -11,7 +14,7 @@ app.config(function ($interpolateProvider) {
 // app.config(['ChartJsProvider', function (ChartJsProvider) {
 //     // Configure all charts
 //     ChartJsProvider.setOptions({
-//         chartColors: ['#4caf50', '#2196f3'],
+//         chartColors: ['#4caf50', '#0c7cd5'],
 //         type: ['line', 'bar'],
 //         responsive: true,
 //         scales: {
@@ -103,8 +106,20 @@ app.controller('hisController', function ($scope, $http, $filter, $timeout) {
                     datasets: [{
                         type: 'line',
                         label: 'Price',
-                        // yAxisID: 'Price',
-                        // borderColor: '#4caf50',
+                        // xAxisID: 'Time',
+                        yAxisID: 'A',
+                        // yAxesGroup: 'price',
+                        fill: false,
+                        borderJoinStyle: 'bevel',
+                        lineTension: 0,
+                        borderColor: '#4caf50',
+                        pointBackgroundColor:'#4caf50',
+                        backgroundColor:'#4caf50',
+                        pointRadius: 2,
+                        pointBorderColor:'#f9f9f9',
+                        pointHoverBorderWidth: 2,
+                        pointHoverRadius: 6,
+                        pointHoverBorderColor: '#f9f9f9',
                         // pointBorderColor: '#4caf50',
                         // pointRadius: '2',
                         data: [stockPrice]
@@ -112,18 +127,55 @@ app.controller('hisController', function ($scope, $http, $filter, $timeout) {
                     {
                         type: 'bar',
                         label: 'Volume',
-                        // yAxisID: 'Volume',
-                        // borderColor: '#2196f3',
+                        // xAxisID: 'Time',
+                        yAxisID: 'B',
+                        // yAxesGroup: 'volume',
+                        borderColor: '#0c7cd5',
+                        hoverBorderColor: '#0c7cd5',
+                        hoverBorderWidth: 2,
+                        backgroundColor: '#0c7cd5',
                         data: [stockVolume]
                     }]
                 };
     var options = {
+                    tooltips:{
+                        backgroundColor: 'rgba(245,245,245,0.8)',
+                        titleFontColor: '#666666',
+                        bodyFontColor: '#666666',
+                        bodySpacing: 3,
+                    },
                     scales: {
+                        xAxes:[{
+                            gridLines:{
+                                display: false
+                            },
+                        }],
                         yAxes: [{
+                            id: 'A',
+                            type: 'linear',
+                            position: 'left',
+                            gridLines:{
+                                display: false
+                            },
                             ticks: {
-                                beginAtZero: true
+                                beginAtZero: false
                             }
-                        }]
+                        },
+                        {
+                            id: 'B',
+                            type: 'linear',
+                            position: 'right',
+                            gridLines:{
+                                display: false
+                            },
+                            ticks: {
+                                beginAtZero: false
+                            }
+                        }],
+                        fontFamily: "'Lato', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'"
+                    },
+                    legend: {
+                        display: true
                     }
                 };
     var ctx = $('#myChart');

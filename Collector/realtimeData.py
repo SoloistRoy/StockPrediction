@@ -1,3 +1,6 @@
+# written by: Yiran Sun
+# assisted by:
+# debugged by: Yiran Sun
 from iqfeed import historicData
 from pymongo import MongoClient
 

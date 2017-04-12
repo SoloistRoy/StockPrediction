@@ -1,3 +1,6 @@
+# written by: Yiran Sun
+# assisted by: Jingyuan Li
+# debugged by: Yiran Sun, Jingyuan Li
 from flask import Flask, render_template, url_for, request, session, redirect
 from flask_pymongo import PyMongo
 import json
