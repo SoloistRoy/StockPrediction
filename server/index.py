@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 # written by: Yiran Sun
 # assisted by: Jingyuan Li
 # debugged by: Yiran Sun, Jingyuan Li
-from flask import Flask, render_template, url_for, request, session, redirect
-=======
 from flask import Flask, render_template, url_for, request, session, redirect, jsonify
->>>>>>> a91980c3dedac726e6518b9c1f110732cf9ca40b
 from flask_pymongo import PyMongo
 from bson import json_util
 import json
