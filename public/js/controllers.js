@@ -88,9 +88,9 @@ app.controller('hisController', function ($scope, $http, $filter) {
                         fill: false,
                         borderJoinStyle: 'bevel',
                         lineTension: 0,
-                        borderColor: '#4caf50',
-                        pointBackgroundColor:'#4caf50',
-                        backgroundColor:'#4caf50',
+                        borderColor: '#69b04a',
+                        pointBackgroundColor:'#69b04a',
+                        backgroundColor:'#69b04a',
                         pointRadius: 2,
                         pointBorderColor:'#f9f9f9',
                         pointHoverBorderWidth: 2,
@@ -102,10 +102,10 @@ app.controller('hisController', function ($scope, $http, $filter) {
                         type: 'bar',
                         label: 'Volume',
                         yAxisID: 'B',
-                        borderColor: '#0c7cd5',
-                        hoverBorderColor: '#0c7cd5',
+                        borderColor: '#49b2e3',
+                        hoverBorderColor: '#49b2e3',
                         hoverBorderWidth: 2,
-                        backgroundColor: '#0c7cd5',
+                        backgroundColor: '#49b2e3',
                         data: [stockVolume]
                     }]
                 };
