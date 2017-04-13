@@ -7477,3 +7477,11 @@ body {
 .btn:focus {
   outline: none;
 }
+.floatbtn {
+  position: fixed;
+  bottom: 130px;
+  right: 0;
+  z-index: 100000;
+  -moz-opacity: 0.60;
+  filter: alpha(opacity=60);
+}

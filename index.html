@@ -55,15 +55,10 @@ debugged by: Jingyuan Li, Yiran Sun
         </div><!--/.nav-collapse -->
       </div>
     </nav>
-
-    <div class="jumbotron container">
-
-      <!-- angular templating -->
-      <!-- this is where content will be injected -->
-      <div ng-view></div>
-      //StockPrice//
-    </div> <!-- /container -->
-
+    
+    <!-- angular templating -->
+    <!-- this is where content will be injected -->
+    <div class="container" ng-view></div>
     <footer>
     </footer>
     
@@ -80,7 +75,6 @@ debugged by: Jingyuan Li, Yiran Sun
 
     <!-- load angular route, controller and js files  -->
     <script src="{{url_for('static', filename='node_modules/angular-route/angular-route.min.js')}}"></script>
-    <script src="{{url_for('static', filename='public/js/stockchart.js')}}"></script>
     <script src="{{url_for('static', filename='public/js/controllers.js')}}"></script>
     <script src="{{url_for('static', filename='public/js/routing.js')}}"></script>
    

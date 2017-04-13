@@ -5,8 +5,6 @@
 
 var app = angular.module('main', ['ngRoute', 'chart.js']);
 
-
-
 app.config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('//').endSymbol('//');
 });
@@ -34,7 +32,7 @@ app.controller('mainController', function ($scope, $http) {
 
 });
 
-app.controller('hisController', function ($scope, $http, $filter, $timeout) {
+app.controller('hisController', function ($scope, $http, $filter) {
     var stockData, stockTime = [],
         stockPrice = [],
         stockVolume = [];
@@ -80,7 +78,8 @@ app.controller('hisController', function ($scope, $http, $filter, $timeout) {
         });
     };
 
-    var data = {
+    //chart configuration
+    var chartdata = {
                     labels: stockTime,
                     datasets: [{
                         type: 'line',
@@ -111,7 +110,13 @@ app.controller('hisController', function ($scope, $http, $filter, $timeout) {
                     }]
                 };
     var options = {
-                    tooltips:{
+                    // title: {
+                    //     display: true,
+                    //     text: 'Stock Price and Volume',
+                    //     fontSize: 24,
+                    //     padding: 24
+                    // },
+                    tooltips: {
                         backgroundColor: 'rgba(245,245,245,0.8)',
                         titleFontColor: '#666666',
                         bodyFontColor: '#666666',
@@ -157,13 +162,29 @@ app.controller('hisController', function ($scope, $http, $filter, $timeout) {
         // data: data,
         options: options
     });
+    
     $scope.load();
+
+    //Scroll Top button
+    $(window).scroll(function () {
+            if ($(this).scrollTop() > 100) {
+                $('.floatbtn').fadeIn();
+            } else {
+                $('.floatbtn').fadeOut();
+            }
+        });
+        $('.floatbtn').click(function () {
+            $("html, body").animate({ scrollTop: 0 }, 1000);
+            return false;
+        });
 
     //Historical data query
     $scope.hisQuery = function () {
+        $("html, body").animate({ scrollTop: 95 }, 500);
         console.log('-------------Query Data-------------');
         console.log($scope.stockName.value + $scope.dateRange1);
         console.log('------------------------------------');
+
         $http({
             method: 'POST',
             url: '/hisData',
@@ -172,7 +193,9 @@ app.controller('hisController', function ($scope, $http, $filter, $timeout) {
                 dateRange: $scope.dateRange1
             }
         }).then(function (response) {
+
             stockData = response.data;
+            $scope.tableData = response.data;
             console.log('------------stockData---------------');
             console.log(stockData);
             console.log('------------------------------------');
@@ -180,18 +203,13 @@ app.controller('hisController', function ($scope, $http, $filter, $timeout) {
                 stockTime[i] = stockData[i].date;
                 stockPrice[i] = stockData[i].close;
                 stockVolume[i] = stockData[i].volume;
-                console.log('-------------stockPrice-------------');
-                console.log(stockPrice);
-                console.log('------------------------------------');
             }
-            console.log('============================');
-            console.log();
 
             //Render a stock chart(jquery)
             var ctx = $('#myChart');
             var hisChart = new Chart(ctx, {
                 type: 'bar',
-                data: data,
+                data: chartdata,
                 options: options
             });
             
