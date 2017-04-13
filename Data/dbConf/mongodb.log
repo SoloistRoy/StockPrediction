@@ -1,3 +1,0 @@
-2017-02-24T19:48:33.962-0500 I CONTROL  [main] ***** SERVER RESTARTED *****
-2017-02-24T19:48:34.300-0500 I CONTROL  [main] Trying to install Windows service 'StockPredictionDB'
-2017-02-24T19:48:34.301-0500 I CONTROL  [main] Error connecting to the Service Control Manager: 拒绝访问。 (5)

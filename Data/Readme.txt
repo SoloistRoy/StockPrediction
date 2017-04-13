@@ -1,0 +1,1 @@
+mongorestore --drop --db StockAnnual dump/StockAnnual
