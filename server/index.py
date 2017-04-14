@@ -62,6 +62,11 @@ def hisQuery():
 	# historicalData = historical.getHisData(stockName, dateRange, stock)
 	return str(historicalData)
 
+@app.route('/getPre', methods=['POST'])
+def predict():
+	stockName = request.json['stockName']
+	return stockName
+
 if __name__ == '__main__':
 	app.debug = True
 	app.run()
