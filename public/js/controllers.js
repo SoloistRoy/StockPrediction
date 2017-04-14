@@ -22,9 +22,9 @@ app.controller('mainController', function ($scope, $http) {
             }).then(function(response) {
                 console.log(response);
                 // pass data in json, a[0]: one piece, a[1]: json data
-                var a = response.data;
-                var data = a[1]
-                $scope.stockPrice = a[1];
+                var dataSet = response.data;
+                var data = dataSet[1]
+                $scope.stockPrice = data;
             }, function(error) {
                 console.log(error);
             });
@@ -224,7 +224,23 @@ app.controller('hisController', function ($scope, $http, $filter) {
 });
 
 app.controller('preController', function ($scope, $http) {
-
+    $scope.prediction = "Prediction";
+    $scope.buttonClick = function () {
+        $http({
+                method: 'POST',
+                url: '/getPre',
+                data: {
+                    stockName: $scope.inputStockName
+                }
+            }).then(function(response) {
+                console.log(response);
+                // pass data in json, a[0]: one piece, a[1]: json data
+                var data = response.data;
+                $scope.prediction = data;
+            }, function(error) {
+                console.log(error);
+            });
+    }
 });
 
 app.controller('groupController', function ($scope, $http) {
