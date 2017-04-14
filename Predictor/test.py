@@ -4,6 +4,7 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVR
 from sklearn.linear_model import Ridge
 from sklearn.linear_model import Lasso
+from sklearn.externals import joblib
 import numpy as np
 import copy
 
@@ -17,6 +18,9 @@ def predictNew(data):
 	# Open price prediction
 	oModel = Lasso(0.04)
 	oModel.fit(np.array(data[:-1]), np.array([i[2] for i in data[1:]]))
+
+	joblib.dump(oModel, 'oModelAAPL')
+
 	oPrice = oModel.predict([data[-1]])[0]
 
 	# High, low process adn prediction
@@ -26,6 +30,9 @@ def predictNew(data):
 
 	hlModel = Lasso(1.5)
 	hlModel.fit(np.array(data[:-1]), np.array([i[0:2] for i in data[1:]]))
+
+	joblib.dump(hlModel, 'hlModelAAPL')
+
 	hlPrice = hlModel.predict([data[-1]])[0]
 
 	# Volume
@@ -37,6 +44,9 @@ def predictNew(data):
 
 	vModel = Ridge(0.01)
 	vModel.fit(np.array(data[:-1]), np.array([i[4] for i in data[1:]]))
+
+	joblib.dump(vModel, 'vModelAAPL')
+
 	volume = int(vModel.predict([data[-1]])[0])
 
 	# Close
@@ -46,6 +56,9 @@ def predictNew(data):
 
 	cModel = Ridge(1)
 	cModel.fit(np.array(data[:-1]), np.array([i[3] for i in data[1:]]))
+
+	joblib.dump(cModel, 'cModelAAPL')
+
 	cPrice = cModel.predict([data[-1]])[0]
 
 	new = [hlPrice[0], hlPrice[1], oPrice, cPrice, volume]
