@@ -20,6 +20,7 @@ def predictNew(data):
 	oModel.fit(np.array(data[:-1]), np.array([i[2] for i in data[1:]]))
 
 	joblib.dump(oModel, 'oModelAAPL')
+	print 'input: ',data[-1]
 
 	oPrice = oModel.predict([data[-1]])[0]
 
@@ -32,6 +33,7 @@ def predictNew(data):
 	hlModel.fit(np.array(data[:-1]), np.array([i[0:2] for i in data[1:]]))
 
 	joblib.dump(hlModel, 'hlModelAAPL')
+	print 'input: ',data[-1]
 
 	hlPrice = hlModel.predict([data[-1]])[0]
 
@@ -46,6 +48,7 @@ def predictNew(data):
 	vModel.fit(np.array(data[:-1]), np.array([i[4] for i in data[1:]]))
 
 	joblib.dump(vModel, 'vModelAAPL')
+	print 'input: ',data[-1]
 
 	volume = int(vModel.predict([data[-1]])[0])
 
@@ -58,6 +61,7 @@ def predictNew(data):
 	cModel.fit(np.array(data[:-1]), np.array([i[3] for i in data[1:]]))
 
 	joblib.dump(cModel, 'cModelAAPL')
+	print 'input: ',data[-1]
 
 	cPrice = cModel.predict([data[-1]])[0]
 

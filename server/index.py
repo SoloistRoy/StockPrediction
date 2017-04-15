@@ -5,8 +5,11 @@ from flask import Flask, render_template, url_for, request, session, redirect, j
 from flask_pymongo import PyMongo
 from bson import json_util
 import json
-import historicalServer as historical
 import datetime
+
+import predictor
+import historicalServer as historical
+
 
 app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
 # app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
@@ -65,6 +68,8 @@ def hisQuery():
 @app.route('/getPre', methods=['POST'])
 def predict():
 	stockName = request.json['stockName']
+	mPredictor = predictor.annualPredict()
+	modelList = mPredictor.load(stockName)
 	return stockName
 
 if __name__ == '__main__':
