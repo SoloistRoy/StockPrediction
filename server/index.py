@@ -6,6 +6,7 @@ from flask_pymongo import PyMongo
 from bson import json_util
 import json
 import datetime
+import pymongo
 
 import predictor
 import historicalServer as historical
@@ -67,10 +68,18 @@ def hisQuery():
 
 @app.route('/getPre', methods=['POST'])
 def predict():
-	stockName = request.json['stockName']
+	stockName = str(request.json['stockName'])
+	stock = mongo.db[stockName]
+	latest = stock.find().sort([('date', pymongo.DESCENDING)])[0]
+	latest = [latest['high'],latest['low'],latest['open'],latest['close'],latest['volume']]
+
+	#period = datePicker -- add module in JS
+	period = 5
+
 	mPredictor = predictor.annualPredict()
-	modelList = mPredictor.load(stockName)
-	return stockName
+	prePrice = mPredictor.load(stockName, period, latest)
+	print prePrice #Result of 5 days prediction
+	return str(prePrice)
 
 if __name__ == '__main__':
 	app.debug = True

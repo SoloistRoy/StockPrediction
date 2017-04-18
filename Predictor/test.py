@@ -77,7 +77,7 @@ for i in f.readlines():
 	dataSet.append(x)
 dataSet.reverse()
 
-for i in range(10):
+for i in range(1):
 	mData = copy.deepcopy(dataSet)
 	temp = predictNew(mData)
 	dataSet.append(temp)
