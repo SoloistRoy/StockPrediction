@@ -12,8 +12,8 @@ import predictor
 import historicalServer as historical
 
 
-app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
-# app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
+# app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
+app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
 app.config['MONGO_DBNAME'] = 'StockAnnual'
 app.config['MONGO_URI'] = 'mongodb://localhost/StockAnnual'
 app.config['SECRET_KEY'] = 'super secret key'
@@ -62,9 +62,15 @@ def hisQuery():
 	print dtlarge,dtsmall
 	stock = mongo.db[stockName]
 	# print stock.find({})
-	historicalData = stock.find({'date':{'$gt':dtsmall, '$lt':dtlarge}})
+	historicalData = stock.find({'date':{'$gte':dtsmall, '$lte':dtlarge}}).sort([('date', pymongo.ASCENDING)])
+	historicalResult  = []
+	for i in historicalData:
+		temp = str(i['date']).split(' ')
+		i['date'] = temp[0]
+		historicalResult.append(i)
+	historicalData = json_util.dumps(historicalResult)
 	# historicalData = historical.getHisData(stockName, dateRange, stock)
-	return str(historicalData)
+	return historicalData
 
 @app.route('/getPre', methods=['POST'])
 def predict():

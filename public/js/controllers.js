@@ -33,9 +33,9 @@ app.controller('mainController', function ($scope, $http) {
 });
 
 app.controller('hisController', function ($scope, $http, $filter) {
-    var stockData, stockTime = [],
-        stockPrice = [],
-        stockVolume = [];
+    var stockData, stockTime = ["1900-01-01"],
+        stockPrice = [0],
+        stockVolume = [0];
 
     //The selector
     $scope.stocks = [{
@@ -110,12 +110,6 @@ app.controller('hisController', function ($scope, $http, $filter) {
                     }]
                 };
     var options = {
-                    // title: {
-                    //     display: true,
-                    //     text: 'Stock Price and Volume',
-                    //     fontSize: 24,
-                    //     padding: 24
-                    // },
                     tooltips: {
                         backgroundColor: 'rgba(245,245,245,0.8)',
                         titleFontColor: '#666666',
@@ -157,9 +151,10 @@ app.controller('hisController', function ($scope, $http, $filter) {
                     }
                 };
     var ctx = $('#myChart');
+    //prerender chart
     var hisChart = new Chart(ctx, {
         type: 'bar',
-        // data: data,
+        data: chartdata,
         options: options
     });
     
@@ -193,7 +188,10 @@ app.controller('hisController', function ($scope, $http, $filter) {
                 dateRange: $scope.dateRange1
             }
         }).then(function (response) {
-
+            //Initialize data in each query
+            stockPrice = [0];
+            stockVolume = [0];
+            stockTime = ["1900-01-01"];
             stockData = response.data;
             $scope.tableData = response.data;
             console.log('------------stockData---------------');
@@ -204,18 +202,14 @@ app.controller('hisController', function ($scope, $http, $filter) {
                 stockPrice[i] = stockData[i].close;
                 stockVolume[i] = stockData[i].volume;
             }
-
-            //Render a stock chart(jquery)
-            var ctx = $('#myChart');
-            var hisChart = new Chart(ctx, {
-                type: 'bar',
-                data: chartdata,
-                options: options
-            });
             
+            // Update chart
             hisChart.data.datasets[0].data = stockPrice;
             hisChart.data.datasets[1].data = stockVolume;
             hisChart.data.labels = stockTime;
+            console.log("New data: ");
+            console.log(stockPrice);
+            console.log(stockTime);
             hisChart.update();
         }, function (error) {
             console.log(error);
