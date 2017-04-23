@@ -4,18 +4,60 @@ assisted by:
 debugged by: Jingyuan Li
 -->
 <!-- Main component for a primary marketing message or call to action -->
-<div class="text-center" ng-controller="preController">
-	<div class="test-div bordered">
+<div ng-controller="preController">
+	<br>
+	<div class="row">
+        <div class="col-lg-2">
+            <select class="form-control" ng-model="inputStockName" ng-options="stock.name disable when stock.notAnOption for stock in stocks"></select>
+        </div>
+        <div class="col-lg-1">
+            <select class="form-control" ng-model="inputPredictTerm" ng-options="term.name disable when term.notAnOption for term in terms"></select>
+        </div>
+        <div class="col-lg-2">
+            <button type="submit" class="btn btn-sm btn-primary btn-customize" ng-click="preQuery()">get price</button>
+        </div>
+    </div>
+	<hr>
+	<div class="row container-fluid" ><h4>Stock Price and Volume</h4></div>
+    <div class="row">
+        <canvas id="myChart"></canvas>
+    </div>
+    <hr>
+    <h4>Stock Data</h4>
+    <p class="text-muted"><small>Currency in USD</small></p>
+    <div class="row">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Open</th>
+                    <th>High</th>
+                    <th>Low</th>
+                    <th>Close</th>
+                    <th>volume</th>
+                </tr>
+            </thead>
+            <tbody>
+            	<tr ng-repeat="x in tableData">
+            		<td>//x.date//</td>
+            		<td>//x.open//</td>
+            		<td>//x.high//</td>
+            		<td>//x.low//</td>
+            		<td>//x.close//</td>
+                    <td>//x.volume//</td>
+            	</tr>
+            </tbody>
+        </table>
+    </div>
+    <button class="btn btn-sm btn-primary floatbtn" value="Scroll Top"  style="display:none">Scroll Top</button>
+	<!--<div class="test-div bordered">
   		<div class="col-md-6">
-  			<!--<form method=POST action="{{ url_for('query') }}">-->
 			<input type="text" class="form-control" name="stockName" placeholder="Stock Name" ng-model="inputStockName">
 		    <br>
 		    <button type="submit" class="btn btn-primary btn-prime" ng-click="buttonClick()">Get Price</button> 
-		    <!--<button type="submit" class="btn btn-primary btn-block">Click</button>-->
-		  	<!--</form>-->
   		</div>
  		<div class="col-md-6">
     		<p>//prediction//</p>
   		</div>
-	</div>
+	</div>-->
 </div>

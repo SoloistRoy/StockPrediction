@@ -84,6 +84,7 @@ def predict():
 
 	mPredictor = predictor.annualPredict()
 	prePrice = mPredictor.load(stockName, period, latest)
+	prePrice = json_util.dumps(prePrice)
 	print prePrice #Result of 5 days prediction
 	return str(prePrice)
 
