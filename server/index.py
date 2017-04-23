@@ -78,15 +78,28 @@ def predict():
 	stock = mongo.db[stockName]
 	latest = stock.find().sort([('date', pymongo.DESCENDING)])[0]
 	latest = [latest['high'],latest['low'],latest['open'],latest['close'],latest['volume']]
-
+	
+	prePriceJson = []
 	#period = datePicker -- add module in JS
 	period = 5
 
 	mPredictor = predictor.annualPredict()
 	prePrice = mPredictor.load(stockName, period, latest)
-	prePrice = json_util.dumps(prePrice)
-	print prePrice #Result of 5 days prediction
-	return str(prePrice)
+	for i in range(period):
+		dataJson = {}
+		dataJson['high'] = prePrice[2*i][0]
+		dataJson['low'] = prePrice[2*i][1]
+		dataJson['open'] = prePrice[2*i][2]
+		dataJson['close'] = prePrice[2*i][3]
+		dataJson['volume'] = prePrice[2*i][4]
+		dataJson['date'] = prePrice[2*i+1]
+		prePriceJson.append(dataJson)
+		print "===================="
+		print dataJson
+	prePriceJson = json_util.dumps(prePriceJson)
+	print "----------------------------------"
+	print prePriceJson #Result of 5 days prediction
+	return prePriceJson
 
 if __name__ == '__main__':
 	app.debug = True

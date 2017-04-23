@@ -395,10 +395,10 @@ app.controller('preController', function ($scope, $http) {
                 console.log('------------stockData---------------');
                 console.log(stockData);
                 console.log('------------------------------------');
-                for (var i = 0; i < stockData.length/2; i++) {
-                    stockTime[i] = stockData[i*2+1];
-                    stockPrice[i] = stockData[i*2][3];
-                    stockVolume[i] = stockData[i*2][4];
+                for (var i = 0; i < stockData.length; i++) {
+                    stockTime[i] = stockData[i].date;
+                    stockPrice[i] = stockData[i].close;
+                    stockVolume[i] = stockData[i].volume;
                 }
                 
                 // Update chart
