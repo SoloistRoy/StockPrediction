@@ -13,6 +13,7 @@ import pymongo
 import predictor
 from collector import realtimeData
 from collector import annualData
+from collector import Indicator as idc
 
 app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
 # app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
@@ -57,11 +58,8 @@ def query():
 
 @app.route('/hisData', methods=['POST'])
 def hisQuery():
-	print 'get'
 	data = request.data
-	print data
 	dataDict = json.loads(data)
-	print dataDict
 	stockName = dataDict['stockName']
 	dateRange = dataDict['dateRange']
 	print stockName, type(dateRange)
@@ -78,6 +76,7 @@ def hisQuery():
 		historicalResult.append(i)
 	historicalData = json_util.dumps(historicalResult)
 	# historicalData = historical.getHisData(stockName, dateRange, stock)
+	print idc.RSI(stockName), idc.MACD(stockName)
 	return historicalData
 
 @app.route('/getPre', methods=['POST'])

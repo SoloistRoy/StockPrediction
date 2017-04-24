@@ -20,7 +20,6 @@ class annualPredict():
 		# print self.oModel.predict([[130,127,127,128,1000000]])
 
 	def compute(self, period, latest):
-		print period
 		preResult = []
 		next_days = []
 		day = int(time.strftime("%d"))
@@ -28,7 +27,6 @@ class annualPredict():
 		year = int(time.strftime("%Y"))
 		d = datetime.date(year, month, day)
 		for i in range(period):
-			print latest
 			oPrice = self.oModel.predict([latest])
 
 			latest.append(oPrice[0])
@@ -47,6 +45,7 @@ class annualPredict():
 			latest=[float(hlPrice[0][0]), float(hlPrice[0][1]), float(oPrice[0]), float(cPrice[0]), int(volume[0])]
 			preResult.append(copy.deepcopy(latest))
 			preResult.append(str(self.next_weekday(d)))
+		print preResult
 		return preResult	
 	
 	def next_weekday(self, d):
