@@ -5,8 +5,8 @@ debugged by: Jingyuan Li
 -->
 <!-- Main component for a primary marketing message or call to action -->
 <div ng-controller="preController">
-	<br>
-	<div class="row">
+    <br>
+    <div class="row">
         <div class="col-lg-2">
             <select class="form-control" ng-model="inputStockName" ng-options="stock.name disable when stock.notAnOption for stock in stocks"></select>
         </div>
@@ -17,8 +17,8 @@ debugged by: Jingyuan Li
             <button type="submit" class="btn btn-sm btn-primary btn-customize" ng-click="preQuery()">get price</button>
         </div>
     </div>
-	<hr>
-	<div class="row container-fluid" ><h4>Stock Price and Volume</h4></div>
+    <hr>
+    <div class="row container-fluid" ><h4>//inputPredictTerm.name// Prediction</h4></div>
     <div class="row">
         <canvas id="myChart"></canvas>
     </div>
@@ -38,26 +38,26 @@ debugged by: Jingyuan Li
                 </tr>
             </thead>
             <tbody>
-            	<tr ng-repeat="x in tableData">
-            		<td>//x.date//</td>
-            		<td>//x.open//</td>
-            		<td>//x.high//</td>
-            		<td>//x.low//</td>
-            		<td>//x.close//</td>
+                <tr ng-repeat="x in tableData">
+                    <td>//x.date//</td>
+                    <td>//x.open//</td>
+                    <td>//x.high//</td>
+                    <td>//x.low//</td>
+                    <td>//x.close//</td>
                     <td>//x.volume//</td>
-            	</tr>
+                </tr>
             </tbody>
         </table>
     </div>
     <button class="btn btn-sm btn-primary floatbtn" value="Scroll Top"  style="display:none">Scroll Top</button>
-	<!--<div class="test-div bordered">
-  		<div class="col-md-6">
-			<input type="text" class="form-control" name="stockName" placeholder="Stock Name" ng-model="inputStockName">
-		    <br>
-		    <button type="submit" class="btn btn-primary btn-prime" ng-click="buttonClick()">Get Price</button> 
-  		</div>
- 		<div class="col-md-6">
-    		<p>//prediction//</p>
-  		</div>
-	</div>-->
+    <!--<div class="test-div bordered">
+        <div class="col-md-6">
+            <input type="text" class="form-control" name="stockName" placeholder="Stock Name" ng-model="inputStockName">
+            <br>
+            <button type="submit" class="btn btn-primary btn-prime" ng-click="buttonClick()">Get Price</button> 
+        </div>
+        <div class="col-md-6">
+            <p>//prediction//</p>
+        </div>
+    </div>-->
 </div>

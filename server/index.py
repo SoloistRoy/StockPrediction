@@ -1,6 +1,8 @@
 # written by: Yiran Sun
 # assisted by: Jingyuan Li
 # debugged by: Yiran Sun, Jingyuan Li
+# import sys
+# sys.path.append('../Collector')
 from flask import Flask, render_template, url_for, request, session, redirect, jsonify
 from flask_pymongo import PyMongo
 from bson import json_util
@@ -10,7 +12,8 @@ import pymongo
 
 import predictor
 import historicalServer as historical
-
+from collector import realtimeData
+from collector import annualData
 
 app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
 # app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
@@ -21,6 +24,9 @@ app.config['SECRET_KEY'] = 'super secret key'
 mongo = PyMongo(app)
 # dbClient = MongoClient()
 # db = dbClient.StockRealtime
+realtimeData.getRealtime()
+annualData.getAnnual()
+
 
 @app.route('/home')
 @app.route('/')
