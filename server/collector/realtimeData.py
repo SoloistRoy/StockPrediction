@@ -39,4 +39,4 @@ def getRealtime():
             post = {'time':dt, 'price':float(item[4]), 'volume':int(item[5])}
             db[stock].insert_one(post)
         pricceList[stock] = post
-    print pricceList
+    return pricceList

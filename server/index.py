@@ -11,7 +11,6 @@ import datetime
 import pymongo
 
 import predictor
-import historicalServer as historical
 from collector import realtimeData
 from collector import annualData
 
@@ -24,8 +23,9 @@ app.config['SECRET_KEY'] = 'super secret key'
 mongo = PyMongo(app)
 # dbClient = MongoClient()
 # db = dbClient.StockRealtime
-realtimeData.getRealtime()
-annualData.getAnnual()
+# priceList = realtimeData.getRealtime()
+priceList = {'AAPL':{'price':100.00},'BIDU':{'price':100.00},'BABA':{'price':100.00},'YHOO':{'price':100.00},'GOOG':{'price':100.00}}
+# annualData.getAnnual()
 
 
 @app.route('/home')
@@ -45,13 +45,15 @@ def query():
 	# stockName = request.form['stockName']
 	print(request.json)
 	stockName = request.json['stockName']
-	stock = mongo.db[stockName]
-	m = stock.find({})
-	session['piece'] = m[0]['high']
-	mClone = json_util.dumps(m.clone())
+	# stock = mongo.db[stockName]
+	# m = stock.find({})
+	# session['piece'] = m[0]['high']
+	# mClone = json_util.dumps(m.clone())
 	# s = copy.deepcopy(mClone)
-	print 's: ', type(mClone)
-	return jsonify(str(m[0]['high']), mClone)
+	# print 's: ', type(mClone)
+	stock = priceList[stockName]
+	print stock
+	return jsonify(0, stock['price'])
 
 @app.route('/hisData', methods=['POST'])
 def hisQuery():
