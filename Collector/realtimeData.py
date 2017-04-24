@@ -3,30 +3,42 @@
 # debugged by: Yiran Sun
 from iqfeed import historicData
 from pymongo import MongoClient
-
+import pymongo
 import datetime
 
-dateStart = datetime.datetime(2017,2,27)
-dateEnd = datetime.datetime(2017,3,2)     
+def getRealtime():
+    dbClient = MongoClient()
+    db = dbClient.StockRealtime
+    stockList = ['YHOO', 'GOOG', 'AAPL', 'BIDU', 'BABA']
 
-iq = historicData(dateStart, dateEnd, 60) #last parameter is the time gap between 2 reads
+    pricceList = {}
 
-dbClient = MongoClient()
-dbClient.drop_database('StockRealtime')
-db = dbClient.StockRealtime
+    dateEnd = datetime.datetime.now()
 
-stockList = ['YHOO', 'GOOG', 'AAPL', 'BIDU', 'BABA']
-for stock in stockList:
-    stockData = iq.download_symbol(stock)
-    stockData = stockData.split(',')
-    transData = []
-    while stockData:
-        temp = []
-        for i in range(7):
-            temp.append(stockData.pop(0))
-        transData.append(temp)
-    for item in transData:
-        dt = item[0].split(' ')
-        post = {'time':dt[1], 'price':float(item[4]), 'volume':int(item[5])}
-        dt = dt[0].split('-')
-        db[stock+dt[2]+dt[1]+dt[0]].insert_one(post)
+    for stock in stockList:
+        t = list(db[stock].find().sort([('time', pymongo.DESCENDING)]))
+        dateStart = t[0]['time']
+        iq = historicData(dateStart, dateEnd, 60)
+
+        stockData = iq.download_symbol(stock)
+        if stockData == 'E,!NO_DATA!,':
+            pricceList[stock] = t[0]
+            continue
+        stockData = stockData.split(',')
+        transData = []
+        while stockData:
+            temp = []
+            for i in range(7):
+                temp.append(stockData.pop(0))
+            transData.append(temp)
+        for item in transData:
+            dt = item[0].split(' ')
+            dt[0] = dt[0].split('-')
+            dt[1] = dt[1].split(':')
+            dt = datetime.datetime(int(dt[0][0]),int(dt[0][1]),int(dt[0][2]),int(dt[1][0]),int(dt[1][1]),int(dt[1][2]))
+            post = {'time':dt, 'price':float(item[4]), 'volume':int(item[5])}
+            db[stock].insert_one(post)
+        pricceList[stock] = post
+    print pricceList
+
+getRealtime()
