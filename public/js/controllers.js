@@ -45,23 +45,23 @@ app.controller('hisController', function ($scope, $http, $filter) {
             notAnOption: true
         },
         {
-            name: 'Apple',
+            name: 'Apple Inc.',
             value: 'AAPL'
         },
         {
-            name: 'Alibaba',
+            name: 'Alibaba Group',
             value: 'BABA'
         },
         {
-            name: 'Baidu',
+            name: 'Baidu, Inc',
             value: 'BIDU'
         },
         {
-            name: 'Yahoo',
+            name: 'Yahoo! Inc.',
             value: 'YHOO'
         },
         {
-            name: 'Google',
+            name: 'Google (Alphabet Inc.)',
             value: 'GOOG'
         }
     ];
@@ -245,23 +245,23 @@ app.controller('preController', function ($scope, $http) {
             notAnOption: true
         },
         {
-            name: 'Apple',
+            name: 'Apple Inc.',
             value: 'AAPL'
         },
         {
-            name: 'Alibaba',
+            name: 'Alibaba Group',
             value: 'BABA'
         },
         {
-            name: 'Baidu',
+            name: 'Baidu, Inc',
             value: 'BIDU'
         },
         {
-            name: 'Yahoo',
+            name: 'Yahoo! Inc.',
             value: 'YHOO'
         },
         {
-            name: 'Google',
+            name: 'Google (Alphabet Inc.)',
             value: 'GOOG'
         }
     ];
