@@ -3,11 +3,10 @@
 # debugged by: Yiran Sun
 from iqfeed import historicData
 from pymongo import MongoClient
-
 import datetime
 
-dateStart = datetime.datetime(2017,2,27)
-dateEnd = datetime.datetime(2017,3,2)     
+dateStart = datetime.datetime(2017,2,1)
+dateEnd = datetime.datetime(2017,4,23)     
 
 iq = historicData(dateStart, dateEnd, 60) #last parameter is the time gap between 2 reads
 
@@ -27,6 +26,8 @@ for stock in stockList:
         transData.append(temp)
     for item in transData:
         dt = item[0].split(' ')
-        post = {'time':dt[1], 'price':float(item[4]), 'volume':int(item[5])}
-        dt = dt[0].split('-')
-        db[stock+dt[2]+dt[1]+dt[0]].insert_one(post)
+        dt[0] = dt[0].split('-')
+        dt[1] = dt[1].split(':')
+        dt = datetime.datetime(int(dt[0][0]),int(dt[0][1]),int(dt[0][2]),int(dt[1][0]),int(dt[1][1]),int(dt[1][2]))
+        post = {'time':dt, 'price':float(item[4]), 'volume':int(item[5])}
+        db[stock].insert_one(post)
