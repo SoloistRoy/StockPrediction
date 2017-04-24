@@ -111,10 +111,10 @@ app.controller('hisController', function ($scope, $http, $filter) {
                         type: 'bar',
                         label: 'Volume',
                         yAxisID: 'B',
-                        borderColor: '#49b2e3',
+                        borderColor: '#a4d9f1',
                         hoverBorderColor: '#49b2e3',
                         hoverBorderWidth: 2,
-                        backgroundColor: '#49b2e3',
+                        backgroundColor: '#a4d9f1',
                         data: [stockVolume]
                     }]
                 };
@@ -292,9 +292,9 @@ app.controller('preController', function ($scope, $http) {
                         fill: false,
                         borderJoinStyle: 'bevel',
                         lineTension: 0,
-                        borderColor: '#69b04a',
-                        pointBackgroundColor:'#69b04a',
-                        backgroundColor:'#69b04a',
+                        borderColor: '#6b73d6',
+                        pointBackgroundColor:'#6b73d6',
+                        backgroundColor:'#6b73d6',
                         pointRadius: 2,
                         pointBorderColor:'#f9f9f9',
                         pointHoverBorderWidth: 2,
@@ -306,10 +306,10 @@ app.controller('preController', function ($scope, $http) {
                         type: 'bar',
                         label: 'Volume',
                         yAxisID: 'B',
-                        borderColor: '#49b2e3',
-                        hoverBorderColor: '#49b2e3',
+                        borderColor: '#cdeaf7',
+                        // hoverBorderColor: '#794DDA',
                         hoverBorderWidth: 2,
-                        backgroundColor: '#49b2e3',
+                        backgroundColor: '#cdeaf7',
                         data: [stockVolume]
                     }]
                 };
