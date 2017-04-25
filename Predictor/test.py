@@ -79,7 +79,7 @@ scaler = preprocessing.RobustScaler()
 dataSet = scaler.fit_transform(dataSet).tolist()
 joblib.dump(scaler, 'normalizeModel')
 
-for i in range(10):
+for i in range(1):
 	mData = copy.deepcopy(dataSet)
 	temp = predictNew(mData)
 	dataSet.append(scaler.transform([temp])[0])
