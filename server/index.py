@@ -91,7 +91,7 @@ def predict():
 	period = int(request.json['datePicker'])
 
 	mPredictor = predictor.annualPredict()
-	prePrice = mPredictor.load(stockName, period, latest)
+	prePrice = mPredictor.load(stockName, period, latest, '')
 	for i in range(period):
 		dataJson = {}
 		dataJson['high'] = prePrice[2*i][0]

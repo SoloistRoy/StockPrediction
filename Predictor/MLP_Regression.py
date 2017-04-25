@@ -20,7 +20,7 @@ def mlp_predict(days, stock='YHOO'):
     #test data
     Z = stockFeature[N + offset: (N + days + offset)]
     # Fit regression model hidden_layer_sizes
-    mlp = MLPRegressor(solver='lbfgs', activation='relu', verbose= False,max_iter='tol', hidden_layer_sizes=(50,))
+    mlp = MLPRegressor(solver='lbfgs', activation='identity', verbose= False,max_iter='tol', hidden_layer_sizes=(50,))
     mlp.fit(X, y)
     y_log = mlp.predict(Z)
     #print np.ndarray.tolist(y_log)

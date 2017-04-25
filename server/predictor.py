@@ -1,7 +1,12 @@
+from sklearn.multioutput import MultiOutputRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neural_network import MLPRegressor
 from sklearn.svm import SVR
 from sklearn.linear_model import Ridge
 from sklearn.linear_model import Lasso
 from sklearn.externals import joblib
+from sklearn import preprocessing
 import copy
 import datetime
 import time
@@ -9,17 +14,24 @@ import time
 class annualPredict():
 	def  __init__(self):
 		self.modelList = ['oModel', 'hlModel', 'vModel', 'cModel']
+		self.scaler = None
 
-	def load(self, stockName, period, latest):
+	def load(self, stockName, period, latest, method = ''):
+		if method == 'SVM':
+			self.modelList = ['oModel', 'hModel', 'lModel', 'vModel', 'cModel']
+		self.scaler = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+stockName+'normalizeModel')
 		for i in self.modelList:
-			model = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+i+stockName)
+			model = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+method+i+stockName)
 			# model = joblib.load('/Users/jingyuan/WorkSpace/SEProject/StockPrediction/Predictor/'+i+stockName)
 			setattr(self, i, model)
 			# print type(i)
-		return self.compute(period, latest)
+
+		latest = self.scaler.transform([latest]).tolist()[0]
+		print latest
+		return self.compute(period, latest, method)
 		# print self.oModel.predict([[130,127,127,128,1000000]])
 
-	def compute(self, period, latest):
+	def compute(self, period, latest, method):
 		preResult = []
 		next_days = []
 		day = int(time.strftime("%d"))
@@ -30,10 +42,14 @@ class annualPredict():
 			oPrice = self.oModel.predict([latest])
 
 			latest.append(oPrice[0])
-			hlPrice = self.hlModel.predict([latest])
+			if method == 'SVM':
+				hlPrice = [self.hModel.predict([latest])[0], self.lModel.predict([latest])[0]]
+			else:
+				hlPrice = self.hlModel.predict([latest][0])
+				hlPrice = hlPrice[0]
 
-			latest.append(hlPrice[0][0])
-			latest.append(hlPrice[0][1])
+			latest.append(hlPrice[0])
+			latest.append(hlPrice[1])
 			volume = self.vModel.predict([latest])
 
 			latest.append(volume[0])
@@ -42,9 +58,14 @@ class annualPredict():
 			# next_days.append(self.next_weekday(d))
 			d = self.next_weekday(d)
 
-			latest=[float(hlPrice[0][0]), float(hlPrice[0][1]), float(oPrice[0]), float(cPrice[0]), int(volume[0])]
+			latest=[hlPrice[0], hlPrice[1], oPrice[0], cPrice[0], volume[0]]
+			for i in latest:
+				if i < 0:
+					latest[latest.index(i)] = abs(i)
+			latest = self.scaler.inverse_transform([latest]).tolist()[0]
 			preResult.append(copy.deepcopy(latest))
 			preResult.append(str(self.next_weekday(d)))
+			latest = self.scaler.transform([latest]).tolist()[0]
 		print preResult
 		return preResult	
 	

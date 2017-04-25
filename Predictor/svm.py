@@ -15,11 +15,10 @@ f.readline()
 
 def predictNew(data):
 	# Open price prediction
-	oModel = MLPRegressor(solver='lbfgs', activation='identity', verbose= False,max_iter='tol', hidden_layer_sizes=(50,))
+	oModel = SVR(kernel='rbf', C=1e2, gamma=0.018)
 	oModel.fit(np.array(data[:-1]), np.array([i[2] for i in data[1:]]))
 
-	joblib.dump(oModel, 'ANNoModelAAPL')
-	print 'input: ',data[-1]
+	joblib.dump(oModel, 'SVMoModelAAPL')
 
 	oPrice = oModel.predict([data[-1]])[0]
 
@@ -28,13 +27,15 @@ def predictNew(data):
 		data[i].append(data[i+1][2])
 	data[-1].append(oPrice)
 
-	hlModel = MLPRegressor(solver='lbfgs', activation='identity', verbose= False,max_iter='tol', hidden_layer_sizes=(50,))
-	hlModel.fit(np.array(data[:-1]), np.array([i[0:2] for i in data[1:]]))
+	hModel = SVR(kernel='rbf', C=1e2, gamma=0.018)
+	hModel.fit(np.array(data[:-1]), np.array([i[0] for i in data[1:]]))
+	lModel = SVR(kernel='rbf', C=1e2, gamma=0.018)
+	lModel.fit(np.array(data[:-1]), np.array([i[1] for i in data[1:]]))
 
-	joblib.dump(hlModel, 'ANNhlModelAAPL')
-	print 'input: ',data[-1]
+	joblib.dump(hModel, 'SVMhModelAAPL')
+	joblib.dump(lModel, 'SVMlModelAAPL')
 
-	hlPrice = hlModel.predict([data[-1]])[0]
+	hlPrice = [hModel.predict([data[-1]])[0], lModel.predict([data[-1]])[0]]
 
 	# Volume
 	for i in range(len(data)-1):
@@ -43,10 +44,10 @@ def predictNew(data):
 	data[-1].append(hlPrice[0])
 	data[-1].append(hlPrice[1])
 
-	vModel = MLPRegressor(solver='lbfgs', activation='identity', verbose= False,max_iter='tol', hidden_layer_sizes=(50,))
+	vModel = SVR(kernel='rbf', C=1e2, gamma=0.018)
 	vModel.fit(np.array(data[:-1]), np.array([i[4] for i in data[1:]]))
 
-	joblib.dump(vModel, 'ANNvModelAAPL')
+	joblib.dump(vModel, 'SVMvModelAAPL')
 	print 'input: ',data[-1]
 
 	volume = int(vModel.predict([data[-1]])[0])
@@ -56,10 +57,10 @@ def predictNew(data):
 		data[i].append(data[i+1][4])
 	data[-1].append(volume)
 
-	cModel = MLPRegressor(solver='lbfgs', activation='identity', verbose= False,max_iter='tol', hidden_layer_sizes=(50,))
+	cModel = SVR(kernel='rbf', C=1e2, gamma=0.018)
 	cModel.fit(np.array(data[:-1]), np.array([i[3] for i in data[1:]]))
 
-	joblib.dump(cModel, 'ANNcModelAAPL')
+	joblib.dump(cModel, 'SVMcModelAAPL')
 	print 'input: ',data[-1]
 
 	cPrice = cModel.predict([data[-1]])[0]
