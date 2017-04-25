@@ -88,8 +88,7 @@ def predict():
 	
 	prePriceJson = []
 	#period = datePicker -- add module in JS
-	# period = int(request.json['datePicker'])
-	period = 50
+	period = int(request.json['datePicker'])
 
 	mPredictor = predictor.annualPredict()
 	prePrice = mPredictor.load(stockName, period, latest, '')
