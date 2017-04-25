@@ -24,8 +24,8 @@ def predictNew(data):
 
 	# High, low process adn prediction
 	for i in range(len(data)-1):
-		data[i].append(data[i+1][2])
-	data[-1].append(oPrice)
+		data[i][2] = data[i+1][2]
+	data[-1][2] = oPrice
 
 	hModel = SVR(kernel='rbf', C=1e2, gamma=0.018)
 	hModel.fit(np.array(data[:-1]), np.array([i[0] for i in data[1:]]))
@@ -39,33 +39,31 @@ def predictNew(data):
 
 	# Volume
 	for i in range(len(data)-1):
-		data[i].append(data[i+1][0])
-		data[i].append(data[i+1][1])
-	data[-1].append(hlPrice[0])
-	data[-1].append(hlPrice[1])
+		data[i][0] = data[i+1][0]
+		data[i][1] = data[i+1][1]
+	data[-1][0] = hlPrice[0]
+	data[-1][1] = hlPrice[1]
 
 	vModel = SVR(kernel='rbf', C=1e2, gamma=0.018)
 	vModel.fit(np.array(data[:-1]), np.array([i[4] for i in data[1:]]))
 
 	joblib.dump(vModel, 'SVMvModelAAPL')
-	print 'input: ',data[-1]
 
 	volume = int(vModel.predict([data[-1]])[0])
 
 	# Close
 	for i in range(len(data)-1):
-		data[i].append(data[i+1][4])
-	data[-1].append(volume)
+		data[i][4] = data[i+1][4]
+	data[-1][4] = volume
 
 	cModel = SVR(kernel='rbf', C=1e2, gamma=0.018)
 	cModel.fit(np.array(data[:-1]), np.array([i[3] for i in data[1:]]))
 
 	joblib.dump(cModel, 'SVMcModelAAPL')
-	print 'input: ',data[-1]
 
 	cPrice = cModel.predict([data[-1]])[0]
 
-	new = [hlPrice[0], hlPrice[1], oPrice, cPrice, volume]
+	new = [hlPrice[0], hlPrice[1], oPrice, cPrice, int(volume)]
 	new = scaler.inverse_transform([new]).tolist()[0]
 	print new
 	return new
@@ -77,7 +75,7 @@ for i in f.readlines():
 	x.append(int(i[-1]))
 	dataSet.append(x)
 dataSet.reverse()
-dataSet = dataSet[:-50]
+dataSet = dataSet[:-10]
 
 scaler = preprocessing.MinMaxScaler()
 dataSet = scaler.fit_transform(dataSet).tolist()

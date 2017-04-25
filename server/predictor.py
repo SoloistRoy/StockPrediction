@@ -42,8 +42,8 @@ class annualPredict():
 			oPrice = self.oModel.predict(latest)
 
 			for i in range(len(latest)-1):
-				latest[i].append(latest[i+1][2])
-			latest[-1].append(oPrice[0])
+				latest[i][2] = latest[i+1][2]
+			latest[-1][2] = oPrice[0]
 			if method == 'SVM':
 				hlPrice = [self.hModel.predict(latest)[0], self.lModel.predict(latest)[0]]
 			else:
@@ -51,15 +51,15 @@ class annualPredict():
 				hlPrice = hlPrice[0]
 
 			for i in range(len(latest)-1):
-				latest[i].append(latest[i+1][0])
-				latest[i].append(latest[i+1][1])
-			latest[-1].append(hlPrice[0])
-			latest[-1].append(hlPrice[1])
+				latest[i][0] = latest[i+1][0]
+				latest[i][1] = latest[i+1][1]
+			latest[-1][0] = hlPrice[0]
+			latest[-1][1] = hlPrice[1]
 			volume = self.vModel.predict(latest)
 
 			for i in range(len(latest)-1):
-				latest[i].append(latest[i+1][4])
-			latest[-1].append(volume[0])
+				latest[i][4] = latest[i+1][4]
+			latest[-1][4] = volume[0]
 			cPrice = self.cModel.predict(latest)
 
 			# next_days.append(self.next_weekday(d))
