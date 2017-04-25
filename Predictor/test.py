@@ -15,10 +15,10 @@ f.readline()
 
 def predictNew(data):
 	# Open price prediction
-	oModel = MLPRegressor(solver='lbfgs', activation='identity', verbose= False,max_iter='tol', hidden_layer_sizes=(50,))
+	oModel = Lasso(0.01)
 	oModel.fit(np.array(data[:-1]), np.array([i[2] for i in data[1:]]))
 
-	joblib.dump(oModel, 'ANNoModelAAPL')
+	joblib.dump(oModel, 'oModelAAPL')
 	print 'input: ',data[-1]
 
 	oPrice = oModel.predict([data[-1]])[0]
@@ -28,10 +28,10 @@ def predictNew(data):
 		data[i].append(data[i+1][2])
 	data[-1].append(oPrice)
 
-	hlModel = MLPRegressor(solver='lbfgs', activation='identity', verbose= False,max_iter='tol', hidden_layer_sizes=(50,))
+	hlModel = Lasso(1.5)
 	hlModel.fit(np.array(data[:-1]), np.array([i[0:2] for i in data[1:]]))
 
-	joblib.dump(hlModel, 'ANNhlModelAAPL')
+	joblib.dump(hlModel, 'hlModelAAPL')
 	print 'input: ',data[-1]
 
 	hlPrice = hlModel.predict([data[-1]])[0]
@@ -43,10 +43,10 @@ def predictNew(data):
 	data[-1].append(hlPrice[0])
 	data[-1].append(hlPrice[1])
 
-	vModel = MLPRegressor(solver='lbfgs', activation='identity', verbose= False,max_iter='tol', hidden_layer_sizes=(50,))
+	vModel = Ridge(0.01)
 	vModel.fit(np.array(data[:-1]), np.array([i[4] for i in data[1:]]))
 
-	joblib.dump(vModel, 'ANNvModelAAPL')
+	joblib.dump(vModel, 'vModelAAPL')
 	print 'input: ',data[-1]
 
 	volume = int(vModel.predict([data[-1]])[0])
@@ -56,10 +56,10 @@ def predictNew(data):
 		data[i].append(data[i+1][4])
 	data[-1].append(volume)
 
-	cModel = MLPRegressor(solver='lbfgs', activation='identity', verbose= False,max_iter='tol', hidden_layer_sizes=(50,))
+	cModel = Ridge(1)
 	cModel.fit(np.array(data[:-1]), np.array([i[3] for i in data[1:]]))
 
-	joblib.dump(cModel, 'ANNcModelAAPL')
+	joblib.dump(cModel, 'cModelAAPL')
 	print 'input: ',data[-1]
 
 	cPrice = cModel.predict([data[-1]])[0]
@@ -76,6 +76,7 @@ for i in f.readlines():
 	x.append(int(i[-1]))
 	dataSet.append(x)
 dataSet.reverse()
+dataSet = dataSet[:-50]
 
 scaler = preprocessing.MinMaxScaler()
 dataSet = scaler.fit_transform(dataSet).tolist()

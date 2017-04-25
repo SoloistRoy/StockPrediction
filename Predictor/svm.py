@@ -77,6 +77,7 @@ for i in f.readlines():
 	x.append(int(i[-1]))
 	dataSet.append(x)
 dataSet.reverse()
+dataSet = dataSet[:-50]
 
 scaler = preprocessing.MinMaxScaler()
 dataSet = scaler.fit_transform(dataSet).tolist()

@@ -83,15 +83,15 @@ def hisQuery():
 def predict():
 	stockName = str(request.json['stockName'])
 	stock = mongo.db[stockName]
-	latest = stock.find().sort([('date', pymongo.DESCENDING)])[0]
-	latest = [latest['high'],latest['low'],latest['open'],latest['close'],latest['volume']]
+	latest = stock.find().sort([('date', pymongo.DESCENDING)])[:3]
+	latest = [[one['high'],one['low'],one['open'],one['close'],one['volume']] for one in latest]
 	
 	prePriceJson = []
 	#period = datePicker -- add module in JS
 	period = int(request.json['datePicker'])
 
 	mPredictor = predictor.annualPredict()
-	prePrice = mPredictor.load(stockName, period, latest, '')
+	prePrice = mPredictor.load(stockName, period, latest, 'SVM')
 	for i in range(period):
 		dataJson = {}
 		dataJson['high'] = prePrice[2*i][0]
