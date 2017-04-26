@@ -80,8 +80,8 @@ def hisQuery():
 def predict():
 	stockName = str(request.json['stockName'])
 	stock = mongo.db[stockName]
-	latest = stock.find().sort([('date', pymongo.DESCENDING)])[0]
-	latest = [latest['high'],latest['low'],latest['open'],latest['close'],latest['volume']]
+	latest = stock.find().sort([('date', pymongo.DESCENDING)])[:5]
+	latest = [[one['high'],one['low'],one['open'],one['close'],one['volume']] for one in latest]
 	
 	prePriceJson = []
 	#period = datePicker -- add module in JS
@@ -99,7 +99,7 @@ def predict():
 		dataJson['date'] = prePrice[2*i+1]
 		prePriceJson.append(dataJson)
 	prePriceJson = json_util.dumps(prePriceJson)
-	# print "----------------------------------"
+	print "----------------------------------"
 	# print prePriceJson #Result of 5 days prediction
 	return prePriceJson
 
