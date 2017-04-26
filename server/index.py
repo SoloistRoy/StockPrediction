@@ -9,14 +9,13 @@ from bson import json_util
 import json
 import datetime
 import pymongo
-
 import predictor
 from collector import realtimeData
 from collector import annualData
 from collector import Indicator as idc
 
-app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
-# app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
+# app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
+app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
 app.config['MONGO_DBNAME'] = 'StockAnnual'
 app.config['MONGO_URI'] = 'mongodb://localhost/StockAnnual'
 app.config['SECRET_KEY'] = 'super secret key'
@@ -67,7 +66,6 @@ def hisQuery():
 	dtlarge = datetime.datetime(int(dateRange[19:]),int(dateRange[13:15]),int(dateRange[16:18]))
 	print dtlarge,dtsmall
 	stock = mongo.db[stockName]
-	# print stock.find({})
 	historicalData = stock.find({'date':{'$gte':dtsmall, '$lte':dtlarge}}).sort([('date', pymongo.ASCENDING)])
 	historicalResult  = []
 	for i in historicalData:
@@ -75,7 +73,6 @@ def hisQuery():
 		i['date'] = temp[0]
 		historicalResult.append(i)
 	historicalData = json_util.dumps(historicalResult)
-	# historicalData = historical.getHisData(stockName, dateRange, stock)
 	print idc.RSI(stockName), idc.MACD(stockName)
 	return historicalData
 
@@ -101,12 +98,62 @@ def predict():
 		dataJson['volume'] = prePrice[2*i][4]
 		dataJson['date'] = prePrice[2*i+1]
 		prePriceJson.append(dataJson)
-		print "===================="
-		print dataJson
 	prePriceJson = json_util.dumps(prePriceJson)
-	print "----------------------------------"
-	print prePriceJson #Result of 5 days prediction
+	# print "----------------------------------"
+	# print prePriceJson #Result of 5 days prediction
 	return prePriceJson
+
+@app.route('/indData', methods=['POST'])
+def indQuery():
+	# Get query data
+	stockName = str(request.json['stockName'])
+	
+	indName = str(request.json['indicatorName'])
+	dateRange = str(request.json['dateRange'])
+	print stockName, indName, dateRange
+	stock = mongo.db[stockName]
+	# Calculate date range
+	dtsmall = datetime.datetime(int(dateRange[6:10]),int(dateRange[:2]),int(dateRange[3:5]))
+	dtlarge = datetime.datetime(int(dateRange[19:]),int(dateRange[13:15]),int(dateRange[16:18]))
+	print dtlarge,dtsmall
+	indResult = []
+	indDate  = []
+	indData = stock.find({'date':{'$gte':dtsmall, '$lte':dtlarge}}).sort([('date', pymongo.ASCENDING)])
+	# Get close price list (indResult) and date list (indDate)
+	for i in indData:
+		temp = float(i['close'])
+		temp1 = str(i['date']).split(' ')
+		indDate.append(temp1[0])
+		indResult.append(temp)
+	# Get indicator data
+	N = 10
+	print len(indDateResult)
+	if indName == 'SMA':
+		indDateResult = indDate[N:len(indDate)]
+		idcData = idc.SMA(indResult, N)
+	elif indName == 'EMA':
+		indDateResult = indDate[N+1:len(indDate)]
+		idcData = idc.EMA(indResult, N)
+	else:
+		pass
+	# elif indName == 'EMA':
+	# 	idcData = idc.EMA(indResult, N)
+	# elif indName == 'RSI':
+	# 	idcData = idc.RSI(indResult)
+	# elif indName == 'MACD':
+	# 	idcData = idc.MACD(indResult)
+	print "INDICATOR DATA CALCULATED-----------------------"
+	print len(idcData)
+	idcJson = []
+	for i in range(len(idcData)):
+		dataJson = {}
+		dataJson['date'] = indDateResult[i]
+		dataJson['close'] = idcData[i]
+		idcJson.append(dataJson)
+	idcJson = json_util.dumps(idcJson)
+	print "idcJson-------------------"
+	return idcJson
+
 
 if __name__ == '__main__':
 	app.debug = True

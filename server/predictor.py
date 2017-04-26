@@ -19,10 +19,11 @@ class annualPredict():
 	def load(self, stockName, period, latest, method = ''):
 		if method == 'SVM':
 			self.modelList = ['oModel', 'hModel', 'lModel', 'vModel', 'cModel']
-		self.scaler = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+stockName+'normalizeModel')
+		# self.scaler = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+stockName+'normalizeModel')
+		self.scaler = joblib.load('/Users/jingyuan/WorkSpace/SEProject/StockPrediction/Predictor/'+stockName+'normalizeModel')
 		for i in self.modelList:
-			model = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+method+i+stockName)
-			# model = joblib.load('/Users/jingyuan/WorkSpace/SEProject/StockPrediction/Predictor/'+i+stockName)
+			# model = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+method+i+stockName)
+			model = joblib.load('/Users/jingyuan/WorkSpace/SEProject/StockPrediction/Predictor/'+i+stockName)
 			setattr(self, i, model)
 			# print type(i)
 
@@ -64,7 +65,7 @@ class annualPredict():
 					latest[latest.index(i)] = abs(i)
 			latest = self.scaler.inverse_transform([latest]).tolist()[0]
 			preResult.append(copy.deepcopy(latest))
-			preResult.append(str(self.next_weekday(d)))
+			preResult.append(str(d))
 			latest = self.scaler.transform([latest]).tolist()[0]
 		print preResult
 		return preResult	

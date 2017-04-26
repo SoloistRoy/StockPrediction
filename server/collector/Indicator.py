@@ -4,17 +4,19 @@ import matplotlib.pyplot as plt
 import operator
 import pandas as pd
 def SMA(stock, N):
-    closingPrices, = get_stock_atrributes_data(stock, ['close'])
-    return [np.mean(closingPrices[i: i + N]) for i in range(len(closingPrices) - N)]
+    # closingPrices, = get_stock_atrributes_data('AAPL', ['close'])
+    print "SMA!!!!!!!!!!!!!!!!!!!!!!!!"
+    return [np.mean(stock[i: i + N]) for i in range(len(stock) - N)]
 
 def EMA(stock, N):
-    closingPrices, = get_stock_atrributes_data(stock, ['close'])
+    # closingPrices, = get_stock_atrributes_data(stock, ['close'])
     alpha = 2.0 / (N + 1)
-    curEMA = closingPrices[0]
+    curEMA = stock[0]
     res = [curEMA]
-    for p in closingPrices[1:]:
+    for p in stock[1:]:
         curEMA = (1 - alpha) * curEMA + alpha * p
         res.append(curEMA)
+        
     return res
 def RSI(stock, n = 14):
     prices, = get_stock_atrributes_data(stock, ['close'])

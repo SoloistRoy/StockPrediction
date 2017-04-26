@@ -3,9 +3,26 @@ import numpy as np
 import matplotlib.pyplot as plt
 import operator
 import pandas as pd
-def SMA(stock, N):
-    closingPrices, = get_stock_atrributes_data(stock, ['close'])
-    return [np.mean(closingPrices[i: i + N]) for i in range(len(closingPrices) - N)]
+import datetime
+from flask_pymongo import PyMongo
+import pymongo
+def SMA(stockName, dateRange, N):
+    # Calculate date range
+    stock = mongo.db[stockName]
+    dtsmall = datetime.datetime(int(dateRange[6:10]),int(dateRange[:2]),int(dateRange[3:5]))
+    dtlarge = datetime.datetime(int(dateRange[19:]),int(dateRange[13:15]),int(dateRange[16:18]))
+    print dtlarge,dtsmall
+    indResult = []
+    indData = stock.find({'date':{'$gte':dtsmall, '$lte':dtlarge}}).sort([('date', pymongo.ASCENDING)])
+	# Get close price list (indResult)
+    for i in indData:
+		temp = float(i['close'])
+		indResult.append(temp)
+    # closingPrices  = []
+    # closingPrices, = get_stock_atrributes_data(stockName, ['close'])
+    # return [np.mean(closingPrices[i: i + N]) for i in range(len(closingPrices) - N)]
+    print "=================SMA!!!!!!!!!!!!!!!!"
+    return [np.mean(stock[i: i + N]) for i in range(len(stock) - N)]
 
 def EMA(stock, N):
     closingPrices, = get_stock_atrributes_data(stock, ['close'])
@@ -76,4 +93,8 @@ def test_MACD(stock):
     plt.plot(eF, label='fast')
     plt.legend()
     plt.show()
-test_MACD('YHOO')
+# test_MACD('YHOO')
+# test_EMA('YHOO')
+# test('YHOO')
+dateRange = '02/01/2016 - 02/01/2017'
+plt.plot(SMA('YHOO',dateRange,10), label = 'SMA')
