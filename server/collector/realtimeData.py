@@ -12,6 +12,7 @@ def getRealtime():
     stockList = ['YHOO', 'GOOG', 'AAPL', 'CCF', 'BAC', 'FB', 'TWTR', 'BIDU', 'BABA', 'EDU']
 
     pricceList = {}
+    resPriceList = []
 
     dateEnd = datetime.datetime.now()
 
@@ -38,5 +39,6 @@ def getRealtime():
             dt = datetime.datetime(int(dt[0][0]),int(dt[0][1]),int(dt[0][2]),int(dt[1][0]),int(dt[1][1]),int(dt[1][2]))
             post = {'time':dt, 'price':float(item[4]), 'volume':int(item[5])}
             db[stock].insert_one(post)
-        pricceList[stock] = post
-    return pricceList
+    #         post = {'name':stock, 'price': post['price']}
+    #     resPriceList.append(post)
+    # return resPriceList

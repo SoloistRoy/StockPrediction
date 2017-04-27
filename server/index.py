@@ -6,6 +6,7 @@
 from flask import Flask, render_template, url_for, request, session, redirect, jsonify
 from flask_pymongo import PyMongo
 from bson import json_util
+from pymongo import MongoClient
 import json
 import datetime
 import pymongo
@@ -15,8 +16,8 @@ from collector import annualData
 from collector import Indicator as idc
 from collector import DBManager as dbm
 
-# app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
-app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
+app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
+# app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
 app.config['MONGO_DBNAME'] = 'StockAnnual'
 app.config['MONGO_URI'] = 'mongodb://localhost/StockAnnual'
 app.config['SECRET_KEY'] = 'super secret key'
@@ -25,18 +26,39 @@ app.config['MONGO2_DBNAME'] = 'StockRealtime'
 
 mongo = PyMongo(app)
 mongo2 = PyMongo(app, config_prefix='MONGO2')
+
+def queryRealtime(stock):
+	client = MongoClient()
+	db = client.StockRealtime
+	priceList = []
+	t = list(db[stock].find().sort([('time', pymongo.DESCENDING)]))[0]
+	return {'name':stock, 'price':t['price']}
+
 # dbClient = MongoClient()
 # db = dbClient.StockRealtime
-# priceList = realtimeData.getRealtime() # test: comment these  lines
+priceList = []
+stockList = ['YHOO', 'GOOG', 'AAPL', 'CCF', 'BAC', 'FB', 'TWTR', 'BIDU', 'BABA', 'EDU']
+try:
+	realtimeData.getRealtime() # test: comment these  lines
+except:
+	pass
+for i in stockList:
+	priceList.append(queryRealtime(i))
 try:
 	annualData.getAnnual()
 except:
 	pass
-# print priceList
 
 @app.route('/realTime', methods=['GET'])
 def getRealTime():
-	priceList = [{'name': 'AAPL','price':100.00},{'name':'BIDU','price':100.00},{'name':'BABA','price':100.00},{'name':'YHOO','price':100.00},{'name':'GOOG','price':100.00}]
+	# priceList = [{'name': 'AAPL','price':100.00},{'name':'BIDU','price':100.00},{'name':'BABA','price':100.00},{'name':'YHOO','price':100.00},{'name':'GOOG','price':100.00}]
+	priceList = []
+	try:
+		realtimeData.getRealtime()
+	except:
+		pass
+	for i in stockList:
+		priceList.append(queryRealtime(i))
 	priceList = json_util.dumps(priceList)
 	return priceList
 
@@ -52,18 +74,18 @@ def index():
 	# online_users = mongo.db.GOOG.find({'date': '2017-02-01'})
 	return render_template('index.html')
 
-@app.route('/query', methods=['POST'])
+# @app.route('/query', methods=['POST'])
 def query():
 	# stockName = request.form['stockName']
 	print(request.json)
-	stockName = request.json['stockName']
+	# stockName = request.json['stockName']
 	# stock = mongo.db[stockName]
 	# m = stock.find({})
 	# session['piece'] = m[0]['high']
 	# mClone = json_util.dumps(m.clone())
 	# s = copy.deepcopy(mClone)
 	# print 's: ', type(mClone)
-	stock = priceList[stockName]
+	stock = priceList[0]
 	print stock
 	return jsonify(0, stock['price'])
 
