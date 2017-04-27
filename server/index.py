@@ -13,6 +13,7 @@ import predictor
 from collector import realtimeData
 from collector import annualData
 from collector import Indicator as idc
+from collector import DBManager as dbm
 
 app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
 # app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
@@ -110,7 +111,7 @@ def predict():
 def indQuery():
 	# Get query data
 	stockName = str(request.json['stockName'])
-	
+	method = str(request.json['method'])
 	indName = str(request.json['indicatorName'])
 	dateRange = str(request.json['dateRange'])
 	print stockName, indName, dateRange
@@ -173,6 +174,29 @@ def dateQuery():
 	# dateData = [{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344}]
 	dateData = json_util.dumps(dateData)
 	return dateData
+
+@app.route('/Query', methods=['POST'])
+def queQuery():
+	stockName = str(request.json['stockName'])
+	print stockName
+	highest = dbm.get_highest_price_last_ten_days(stockName)
+	average = dbm.get_ave_price_last_one_year(stockName)
+	lowest = dbm.get_lowest_price_last_one_year(stockName)
+	companies = dbm.get_stock_ave_price_lower_than_lowest_price_selected_stock(stockName)
+	print companies
+	data = [highest,average,lowest]
+	eve = ['Highest stock price in the last ten days','Average stock price in the last one year','Lowest stock price in the last ten days']
+	
+	resData = []
+	for i in range(3):
+		dataJson = {}
+		dataJson['event'] = eve[i]
+		dataJson['value'] = data[i]
+		resData.append(dataJson)
+	# resData = [{'event': 'Highest stock price in the last ten days','value': highest},{'event': 'Average stock price in the last one year','value': average},{{'event': 'Lowest stock price in the last ten days','value': lowest}}]
+	# less = dbm.get_stock_ave_price_lower_than_lowest_price_selected_stock()
+	resData = json_util.dumps(resData)
+	return resData
 
 
 if __name__ == '__main__':

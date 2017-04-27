@@ -91,10 +91,10 @@ app.controller('hisController', function ($scope, $http, $filter) {
             name: 'RSI (Relative Strength Index)',
             value: 'RSI'
         },
-        {
-            name: 'MACD (Moving Average Convergence/Divergence)',
-            value: 'MACD'
-        }
+        // {
+        //     name: 'MACD (Moving Average Convergence/Divergence)',
+        //     value: 'MACD'
+        // }
     ];
     $scope.stockName = $scope.stocks[0];
     $scope.indicatorName = $scope.indicators[0];
@@ -265,8 +265,8 @@ app.controller('hisController', function ($scope, $http, $filter) {
                         fill:false,
                         borderJoinStyle: 'bevel',
                         lineTension: 0,
-                        borderColor: 'be0712',
-                        pointBackgroundColor:'be0712',
+                        borderColor: '#be0712',
+                        pointBackgroundColor:'#be0712',
                         backgroundColor:'#be0712',
                         pointBorderColor:'#be0712',
                         pointHoverBorderColor: '#be0712',
@@ -282,8 +282,8 @@ app.controller('hisController', function ($scope, $http, $filter) {
                         fill:false,
                         borderJoinStyle: 'bevel',
                         lineTension: 0,
-                        borderColor: 'fc0d1b',
-                        pointBackgroundColor:'fc0d1b',
+                        borderColor: 'f#c0d1b',
+                        pointBackgroundColor:'#fc0d1b',
                         backgroundColor:'#fc0d1b',
                         pointBorderColor:'#fc0d1b',
                         pointHoverBorderColor: '#fc0d1b',
@@ -574,8 +574,27 @@ app.controller('preController', function ($scope, $http) {
             value: 15
         }
     ];
+    $scope.methods = [{
+            name: 'Select a Method',
+            value: '',
+            notAnOption: true
+        },
+        {
+            name: 'SVM',
+            value: 'S'
+        },
+        {
+            name: 'ANN',
+            value: 'A'
+        },
+        {
+            name: 'Lasso/Ridge',
+            value: 'L'
+        }
+    ];
     $scope.inputStockName = $scope.stocks[0];
     $scope.inputPredictTerm = $scope.terms[0];
+    $scope.inputPredictMethod = $scope.methods[0];
 
     //chart configuration
     var chartdata = {
@@ -677,7 +696,8 @@ app.controller('preController', function ($scope, $http) {
                 url: '/getPre',
                 data: {
                     stockName: $scope.inputStockName.value,
-                    datePicker: $scope.inputPredictTerm.value
+                    datePicker: $scope.inputPredictTerm.value,
+                    method: $scope.inputPredictMethod.value
                 }
             }).then(function(response) {
                 $("html, body").animate({ scrollTop: 97 }, 500);
@@ -713,6 +733,53 @@ app.controller('preController', function ($scope, $http) {
     }
 });
 
-app.controller('groupController', function ($scope, $http) {
+app.controller('queryController', function ($scope, $http) {
+    var staData;
+    //The selector
+    $scope.stocks = [{
+            name: 'Select a Company',
+            value: '',
+            notAnOption: true
+        },
+        {
+            name: 'Apple Inc.',
+            value: 'AAPL'
+        },
+        {
+            name: 'Alibaba Group',
+            value: 'BABA'
+        },
+        {
+            name: 'Baidu, Inc',
+            value: 'BIDU'
+        },
+        {
+            name: 'Yahoo! Inc.',
+            value: 'YHOO'
+        },
+        {
+            name: 'Google (Alphabet Inc.)',
+            value: 'GOOG'
+        }
+    ];
+    $scope.inputStockName = $scope.stocks[0];
 
+    $scope.Query = function () {
+        $http({
+                method: 'POST',
+                url: '/Query',
+                data: {
+                    stockName: $scope.inputStockName.value
+                }
+            }).then(function(response) {
+                //Initialize data in each query
+                staData = response.data;
+                console.log('------------stockData---------------');
+                console.log(staData);
+                console.log('------------------------------------');
+                $scope.statisticData = staData;
+            }, function(error) {
+                console.log(error);
+            });
+    }
 });

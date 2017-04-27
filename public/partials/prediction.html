@@ -14,6 +14,9 @@ debugged by: Jingyuan Li
             <select class="form-control" ng-model="inputPredictTerm" ng-options="term.name disable when term.notAnOption for term in terms"></select>
         </div>
         <div class="col-lg-2">
+            <select class="form-control" ng-model="inputPredictMethod" ng-options="method.name disable when method.notAnOption for method in methods"></select>
+        </div>
+        <div class="col-lg-2">
             <button type="submit" class="btn btn-sm btn-primary btn-customize" ng-click="preQuery()">get price</button>
         </div>
     </div>

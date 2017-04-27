@@ -19,10 +19,10 @@ app.config(function($routeProvider, $locationProvider){
         controller: "preController",
         activetab: "prediction"
     })
-    .when("/groupinfo", {
-        templateUrl: "StockPrediction/public/partials/groupinfo.html",
-        controller: "groupController",
-        activetab: "groupinfo"
+    .when("/query", {
+        templateUrl: "StockPrediction/public/partials/query.html",
+        controller: "queryController",
+        activetab: "query"
     })
     .otherwise({ redirectTo: "/home", activetab: "home" });
 }).run(function ($rootScope, $route) {
