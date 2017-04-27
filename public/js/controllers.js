@@ -171,9 +171,6 @@ app.controller('hisController', function ($scope, $http, $filter) {
                                 dateVolume = [0];
                                 dateTime = ["1900-01-01"];
                                 dateData = response.data;
-                                console.log('------------------------------------');
-                                console.log(dateData);
-                                console.log('------------------------------------');
                                 
                                 for (var i = 0; i < dateData.length; i++) {
                                     dateTime[i] = dateData[i].time;
