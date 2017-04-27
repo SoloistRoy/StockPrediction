@@ -12,6 +12,15 @@ app.config(function ($interpolateProvider) {
 app.controller('mainController', function ($scope, $interval, $http) {
     // Get real time data
     var getdata;
+    $http({
+            method: 'GET',
+            url: '/realTime'
+        }).then(function(response) {
+            console.log(response);
+            $scope.realData = response.data;
+        }, function(error) {
+            console.log(error);
+        });
     console.log("getdata!");
     getdata = $interval(function() {
         $http({
@@ -137,9 +146,9 @@ app.controller('hisController', function ($scope, $http, $filter) {
     $scope.load = function () {
         var end = moment();
         $('input[name="daterange"]').daterangepicker({
-            "startDate": "02/01/2016",
+            "startDate": "01/01/2016",
             "endDate": end,
-            "minDate": "02/01/2016",
+            "minDate": "01/01/2016",
             "maxDate": end
         }, function (start, end, label) {
             console.log("New date range selected: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ")");
@@ -223,7 +232,7 @@ app.controller('hisController', function ($scope, $http, $filter) {
                                     }
                                     //Update chart
                                     mdlChart.data.datasets[0].data = datePrice;
-                                    mdlChart.data.datasets[1].data = dateVolume;
+                                    // mdlChart.data.datasets[1].data = dateVolume;
                                     mdlChart.data.labels = dateTime;
                                     mdlChart.update();
                                     $('#myModal').modal('show');
@@ -375,7 +384,7 @@ app.controller('hisController', function ($scope, $http, $filter) {
                         type: 'line',
                         label: 'Price',
                         yAxisID: 'A',
-                        fill: true,
+                        fill: false,
                         borderJoinStyle: 'bevel',
                         lineTension: 0,
                         borderColor: '#fc0d1b',
@@ -800,6 +809,18 @@ app.controller('preController', function ($scope, $http) {
 });
 
 app.controller('queryController', function ($scope, $http) {
+    function findCompany(params) {
+        if (params==='AAPL') return 'Apple Inc. (AAPL)'
+        else if (params==='BABA') return 'Alibaba Group (BABA)'
+        else if (params==='BIDU') return 'Baidu, Inc. (BIDU)'
+        else if (params==='YHOO') return 'Yahoo! Inc. (YHOO)'
+        else if (params==='GOOG') return 'Google (Alphabet Inc.) (GOOG)'
+        else if (params==='CCF') return 'Chase Corporation (CCF)'
+        else if (params==='BAC') return 'Bank of America Corporation (BAC)'
+        else if (params==='FB') return 'Facebook, Inc. (FB)'
+        else if (params==='TWTR') return 'Twitter, Inc. (TWTR)'
+        else if (params==='EDU') return 'New Oriental Education & Technology Group Inc. (EDU)'
+    }
     var staData;
     //The selector
     $scope.stocks = [{
@@ -816,7 +837,7 @@ app.controller('queryController', function ($scope, $http) {
             value: 'BABA'
         },
         {
-            name: 'Baidu, Inc',
+            name: 'Baidu, Inc.',
             value: 'BIDU'
         },
         {
@@ -860,9 +881,17 @@ app.controller('queryController', function ($scope, $http) {
             }).then(function(response) {
                 //Initialize data in each query
                 staData = response.data;
-                console.log('------------stockData---------------');
-                console.log(staData);
-                console.log('------------------------------------');
+                var company = staData[3].value;
+                company = company.substring(1,company.length-1);
+                var companies = company.split(', ');
+                for (var index = 0; index < companies.length; index++) {
+                    var temp = companies[index];
+                    companies[index] = temp.substring(1,temp.length-1);
+                }
+                for (var index = 0; index < companies.length; index++) {
+                    companies[index] = findCompany(companies[index]);
+                }
+                staData[3].value = companies.join(', ');
                 $scope.statisticData = staData;
             }, function(error) {
                 console.log(error);

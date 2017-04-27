@@ -203,11 +203,12 @@ def queQuery():
 	for i in range(4):
 		dataJson = {}
 		dataJson['event'] = eve[i]
-		dataJson['value'] = data[i]
+		dataJson['value'] = str(data[i])
 		resData.append(dataJson)
 	# resData = [{'event': 'Highest stock price in the last ten days','value': highest},{'event': 'Average stock price in the last one year','value': average},{{'event': 'Lowest stock price in the last ten days','value': lowest}}]
 	# less = dbm.get_stock_ave_price_lower_than_lowest_price_selected_stock()
 	resData = json_util.dumps(resData)
+	print resData
 	return resData
 
 

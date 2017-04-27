@@ -23,7 +23,7 @@ class annualPredict():
 		self.scaler = joblib.load('/Users/jingyuan/WorkSpace/SEProject/StockPrediction/Predictor/'+stockName+'normalizeModel')
 		for i in self.modelList:
 			# model = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+method+i+stockName)
-			model = joblib.load('/Users/jingyuan/WorkSpace/SEProject/StockPrediction/Predictor/'+i+stockName)
+			model = joblib.load('/Users/jingyuan/WorkSpace/SEProject/StockPrediction/Predictor/'+method+i+stockName)
 			setattr(self, i, model)
 			# print type(i)
 		latest = self.scaler.transform(latest).tolist()
