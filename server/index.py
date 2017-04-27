@@ -17,8 +17,8 @@ from collector import annualData
 from collector import Indicator as idc
 from collector import DBManager as dbm
 
-app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
-# app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
+# app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
+app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
 app.config['MONGO_DBNAME'] = 'StockAnnual'
 app.config['MONGO_URI'] = 'mongodb://localhost/StockAnnual'
 app.config['SECRET_KEY'] = 'super secret key'
@@ -232,11 +232,12 @@ def queQuery():
 	for i in range(4):
 		dataJson = {}
 		dataJson['event'] = eve[i]
-		dataJson['value'] = data[i]
+		dataJson['value'] = str(data[i])
 		resData.append(dataJson)
 	# resData = [{'event': 'Highest stock price in the last ten days','value': highest},{'event': 'Average stock price in the last one year','value': average},{{'event': 'Lowest stock price in the last ten days','value': lowest}}]
 	# less = dbm.get_stock_ave_price_lower_than_lowest_price_selected_stock()
 	resData = json_util.dumps(resData)
+	print resData
 	return resData
 
 

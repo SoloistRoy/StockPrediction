@@ -4,10 +4,10 @@ assisted by:
 debugged by: Jingyuan Li
 -->
 <!-- Main component for a primary marketing message or call to action -->
-      <div ng-controller="mainController">
+      <div ng-controller="mainController" ng-init="getRealData()">
         <h2>Stock Prediction</h2>
         <h4>Real Time Data</h4>
-        <p class="leader"><span class="glyphicon glyphicon-info-sign text-info"></span>&nbspThis table refreshes every <span class="text-success">10 seconds</span> to get the real-time stock data</p>
+        <p class="leader"><span class="glyphicon glyphicon-info-sign text-info"></span>&nbspThis table refreshes every <span class="text-success">1 minute</span> to get the real-time stock data</p>
         <p class="text-muted"><small>Currency in USD</small></p>
         <div class="row">
             <table class="table table-striped table-hover">

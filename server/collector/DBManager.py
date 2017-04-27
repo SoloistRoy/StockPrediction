@@ -68,7 +68,7 @@ def get_lowest_price_last_one_year(stock):
 	lowestPrices, = get_stock_atrributes_data_with_limit(stock, ['low'], days)
 	return min(lowestPrices)
 def get_stock_ave_price_lower_than_lowest_price_selected_stock(selectedStock):
-	stockList = ['YHOO', 'GOOG', 'AAPL', 'BIDU', 'BABA']
+	stockList = ['YHOO', 'GOOG', 'AAPL', 'BIDU', 'BABA', 'CCF', 'BAC', 'FB', 'TWTR', 'EDU']
 	lowestPrice = get_lowest_price_last_one_year(selectedStock)
 	stocks = [stock for stock in stockList if get_ave_price_last_one_year(stock) < lowestPrice]
 	return stocks
