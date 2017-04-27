@@ -9,8 +9,20 @@ app.config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('//').endSymbol('//');
 });
 
-app.controller('mainController', function ($scope, $interval, $http) {
+app.controller('mainController', function ($scope, $interval, $http, $rootScope) {
     // Get real time data
+    // $rootScope.$on('$routeChangeStart', function (next, last) {
+    //     $http({
+    //         method: 'GET',
+    //         url: '/realTime'
+    //     }).then(function(response) {
+    //         console.log(response);
+    //         $scope.realData = response.data;
+    //     }, function(error) {
+    //         console.log(error);
+    //     });
+    //     console.log("getdata!");
+    // });
     var getdata;
     $http({
             method: 'GET',
@@ -21,7 +33,6 @@ app.controller('mainController', function ($scope, $interval, $http) {
         }, function(error) {
             console.log(error);
         });
-    console.log("getdata!");
     getdata = $interval(function() {
         $http({
             method: 'GET',
