@@ -15,8 +15,8 @@ from collector import annualData
 from collector import Indicator as idc
 from collector import DBManager as dbm
 
-app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
-# app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
+# app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
+app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
 app.config['MONGO_DBNAME'] = 'StockAnnual'
 app.config['MONGO_URI'] = 'mongodb://localhost/StockAnnual'
 app.config['SECRET_KEY'] = 'super secret key'
@@ -27,12 +27,18 @@ mongo = PyMongo(app)
 mongo2 = PyMongo(app, config_prefix='MONGO2')
 # dbClient = MongoClient()
 # db = dbClient.StockRealtime
-priceList = realtimeData.getRealtime() # test: comment these  lines
+# priceList = realtimeData.getRealtime() # test: comment these  lines
 try:
 	annualData.getAnnual()
 except:
 	pass
-# priceList = {'AAPL':{'price':100.00},'BIDU':{'price':100.00},'BABA':{'price':100.00},'YHOO':{'price':100.00},'GOOG':{'price':100.00}}
+# print priceList
+
+@app.route('/realTime', methods=['GET'])
+def getRealTime():
+	priceList = [{'name': 'AAPL','price':100.00},{'name':'BIDU','price':100.00},{'name':'BABA','price':100.00},{'name':'YHOO','price':100.00},{'name':'GOOG','price':100.00}]
+	priceList = json_util.dumps(priceList)
+	return priceList
 
 @app.route('/home')
 @app.route('/')
@@ -114,7 +120,6 @@ def predict():
 def indQuery():
 	# Get query data
 	stockName = str(request.json['stockName'])
-	method = str(request.json['method'])
 	indName = str(request.json['indicatorName'])
 	dateRange = str(request.json['dateRange'])
 	print stockName, indName, dateRange

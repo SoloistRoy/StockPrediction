@@ -9,7 +9,21 @@ app.config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('//').endSymbol('//');
 });
 
-app.controller('mainController', function ($scope, $http) {
+app.controller('mainController', function ($scope, $interval, $http) {
+    // Get real time data
+    var getdata;
+    console.log("getdata!");
+    getdata = $interval(function() {
+        $http({
+            method: 'GET',
+            url: '/realTime'
+        }).then(function(response) {
+            console.log(response);
+            $scope.realData = response.data;
+        }, function(error) {
+            console.log(error);
+        });
+    }, 30000);
     //Test module
     $scope.stockPrice = "Stock Price";
     $scope.buttonClicked = function () {
@@ -121,11 +135,12 @@ app.controller('hisController', function ($scope, $http, $filter) {
 
     //Load datepicker
     $scope.load = function () {
+        var end = moment();
         $('input[name="daterange"]').daterangepicker({
             "startDate": "02/01/2016",
-            "endDate": "04/20/2017",
+            "endDate": end,
             "minDate": "02/01/2016",
-            "maxDate": "04/27/2017"
+            "maxDate": end
         }, function (start, end, label) {
             console.log("New date range selected: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ")");
         });
@@ -194,25 +209,29 @@ app.controller('hisController', function ($scope, $http, $filter) {
 
                                 if (dateData == "VOID") {  /////////////////////// In this case, pop a alert instead of a graph///////////////////////////////
                                     console.log("VOID")
+                                    window.alert("There is no data at this day!");
                                 }
-                                console.log('------------------------------------');
-                                console.log(dateData);
-                                console.log('------------------------------------');
+                                else{
+                                    console.log('------------------------------------');
+                                    console.log(dateData);
+                                    console.log('------------------------------------');
+                                    
+                                    for (var i = 0; i < dateData.length; i++) {
+                                        dateTime[i] = dateData[i].time;
+                                        datePrice[i] = dateData[i].price;
+                                        dateVolume[i] = dateData[i].volume;
+                                    }
+                                    //Update chart
+                                    mdlChart.data.datasets[0].data = datePrice;
+                                    mdlChart.data.datasets[1].data = dateVolume;
+                                    mdlChart.data.labels = dateTime;
+                                    mdlChart.update();
+                                    $('#myModal').modal('show');
+                                }
                                 
-                                for (var i = 0; i < dateData.length; i++) {
-                                    dateTime[i] = dateData[i].time;
-                                    datePrice[i] = dateData[i].price;
-                                    dateVolume[i] = dateData[i].volume;
-                                }
-                                //Update chart
-                                mdlChart.data.datasets[0].data = datePrice;
-                                mdlChart.data.datasets[1].data = dateVolume;
-                                mdlChart.data.labels = dateTime;
-                                mdlChart.update();
                             }, function (error) {
                                 console.log(error);
                             });
-                            $('#myModal').modal('show');
                         }
                     },
                     scales: {
@@ -306,7 +325,7 @@ app.controller('hisController', function ($scope, $http, $filter) {
                         fill:false,
                         borderJoinStyle: 'bevel',
                         lineTension: 0,
-                        borderColor: 'f#c0d1b',
+                        borderColor: '#fc0d1b',
                         pointBackgroundColor:'#fc0d1b',
                         backgroundColor:'#fc0d1b',
                         pointBorderColor:'#fc0d1b',
@@ -356,7 +375,7 @@ app.controller('hisController', function ($scope, $http, $filter) {
                         type: 'line',
                         label: 'Price',
                         yAxisID: 'A',
-                        fill: false,
+                        fill: true,
                         borderJoinStyle: 'bevel',
                         lineTension: 0,
                         borderColor: '#fc0d1b',
@@ -368,17 +387,18 @@ app.controller('hisController', function ($scope, $http, $filter) {
                         pointHoverRadius: 6,
                         pointHoverBorderColor: '#f9f9f9',
                         data: [datePrice]
-                    },
-                    {
-                        type: 'bar',
-                        label: 'Volume',
-                        yAxisID: 'B',
-                        borderColor: '#a4d9f1',
-                        hoverBorderColor: '#49b2e3',
-                        hoverBorderWidth: 2,
-                        backgroundColor: '#a4d9f1',
-                        data: [dateVolume]
                     }
+                    // ,
+                    // {
+                    //     type: 'bar',
+                    //     label: 'Volume',
+                    //     yAxisID: 'B',
+                    //     borderColor: '#a4d9f1',
+                    //     hoverBorderColor: '#49b2e3',
+                    //     hoverBorderWidth: 2,
+                    //     backgroundColor: '#a4d9f1',
+                    //     data: [dateVolume]
+                    // }
                     ]
                 };
     var mdlOptions = {
@@ -404,18 +424,20 @@ app.controller('hisController', function ($scope, $http, $filter) {
                             ticks: {
                                 beginAtZero: false
                             }
-                        },
-                        {
-                            id: 'B',
-                            type: 'linear',
-                            position: 'right',
-                            gridLines:{
-                                display: false
-                            },
-                            ticks: {
-                                beginAtZero: true
-                            }
-                        }],
+                        }
+                        // ,
+                        // {
+                        //     id: 'B',
+                        //     type: 'linear',
+                        //     position: 'right',
+                        //     gridLines:{
+                        //         display: false
+                        //     },
+                        //     ticks: {
+                        //         beginAtZero: true
+                        //     }
+                        // }
+                        ],
                         fontFamily: "'Lato', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'"
                     },
                     legend: {

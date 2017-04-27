@@ -6,20 +6,31 @@ debugged by: Jingyuan Li
 <!-- Main component for a primary marketing message or call to action -->
       <div ng-controller="mainController">
         <h2>Stock Prediction</h2>
-        <p>Some introduction and instructions here</p>
-        <div class="test-div bordered">
+        <h4>Real Time Data</h4>
+        <p class="leader"><span class="glyphicon glyphicon-info-sign text-info"></span>&nbspThis table refreshes every <span class="text-success">10 seconds</span> to get the real-time stock data</p>
+        <p class="text-muted"><small>Currency in USD</small></p>
+        <div class="row">
+            <table class="table table-striped table-hover">
+                <tbody>
+                    <tr ng-repeat="x in realData">
+                        <td>//x.name//</td>
+                        <td>//x.price//</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--<div class="test-div bordered">
           <h3>Test Module</h3>
           <div class="col-md-6">
-          <!--<form method=POST action="{{ url_for('query') }}">-->
+          <form method=POST action="{{ url_for('query') }}">
             <input type="text" class="form-control" name="stockName" placeholder="Stock Name" ng-model="inputStockName">
             <br>
             <button type="submit" class="btn btn-primary btn-prime" ng-click="buttonClicked()">Get Price</button> 
-            <!--<button type="submit" class="btn btn-primary btn-block">Click</button>-->
-          <!--</form>-->
+            <button type="submit" class="btn btn-primary btn-block">Click</button>
+          </form>
           </div>
           <div class="col-md-6">
             <p>//stockPrice//</p>
-            <!-- <p>{{priceList}}</p> -->
           </div>
-        </div>
+        </div>-->
       </div>
