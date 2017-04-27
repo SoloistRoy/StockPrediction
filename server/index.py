@@ -10,22 +10,25 @@ import json
 import datetime
 import pymongo
 import predictor
-from collector import realtimeData as real
+from collector import realtimeData
 from collector import annualData
 from collector import Indicator as idc
 
-# app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
-app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
+app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
+# app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
 app.config['MONGO_DBNAME'] = 'StockAnnual'
 app.config['MONGO_URI'] = 'mongodb://localhost/StockAnnual'
 app.config['SECRET_KEY'] = 'super secret key'
 
+app.config['MONGO2_DBNAME'] = 'StockRealtime'
+
 mongo = PyMongo(app)
+mongo2 = PyMongo(app, config_prefix='MONGO2')
 # dbClient = MongoClient()
 # db = dbClient.StockRealtime
-# priceList = realtimeData.getRealtime()
-priceList = {'AAPL':{'price':100.00},'BIDU':{'price':100.00},'BABA':{'price':100.00},'YHOO':{'price':100.00},'GOOG':{'price':100.00}}
-# annualData.getAnnual()
+priceList = realtimeData.getRealtime()
+# priceList = {'AAPL':{'price':100.00},'BIDU':{'price':100.00},'BABA':{'price':100.00},'YHOO':{'price':100.00},'GOOG':{'price':100.00}}
+annualData.getAnnual()
 
 
 @app.route('/home')
@@ -80,7 +83,7 @@ def hisQuery():
 def predict():
 	stockName = str(request.json['stockName'])
 	stock = mongo.db[stockName]
-	latest = stock.find().sort([('date', pymongo.DESCENDING)])[:5]
+	latest = stock.find().sort([('date', pymongo.DESCENDING)])[:3]
 	latest = [[one['high'],one['low'],one['open'],one['close'],one['volume']] for one in latest]
 	
 	prePriceJson = []
@@ -159,8 +162,15 @@ def dateQuery():
 	stockName = str(request.json['stockName'])
 	stockDate = str(request.json['stockDate'])
 	print stockName, stockDate
-	dateData = [{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344}]
-	print dateData
+	stockDate = stockDate.split('-')
+	dtsmall = datetime.datetime(int(stockDate[0]), int(stockDate[1]), int(stockDate[2]), 0, 0,)
+	dtlarge = dtsmall+datetime.timedelta(1)
+	print dtsmall, dtlarge
+	stock = mongo2.db[stockName]
+	dateData = list(stock.find({'time':{'$gt':dtsmall, '$lt':dtlarge}}).sort([('time', pymongo.ASCENDING)]))
+	for i in dateData:
+		i['time'] = i['time'].time().strftime('%H:%M')
+	# dateData = [{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344}]
 	dateData = json_util.dumps(dateData)
 	return dateData
 
