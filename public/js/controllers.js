@@ -12,6 +12,15 @@ app.config(function ($interpolateProvider) {
 app.controller('mainController', function ($scope, $interval, $http) {
     // Get real time data
     var getdata;
+    $http({
+            method: 'GET',
+            url: '/realTime'
+        }).then(function(response) {
+            console.log(response);
+            $scope.realData = response.data;
+        }, function(error) {
+            console.log(error);
+        });
     console.log("getdata!");
     getdata = $interval(function() {
         $http({
