@@ -9,7 +9,7 @@ import datetime
 def getRealtime():
     dbClient = MongoClient()
     db = dbClient.StockRealtime
-    stockList = ['YHOO', 'GOOG', 'AAPL', 'BIDU', 'BABA']
+    stockList = ['YHOO', 'GOOG', 'AAPL', 'CCF', 'BAC', 'FB', 'TWTR', 'BIDU', 'BABA', 'EDU']
 
     pricceList = {}
 
@@ -17,7 +17,7 @@ def getRealtime():
 
     for stock in stockList:
         t = list(db[stock].find().sort([('time', pymongo.DESCENDING)]))
-        dateStart = t[0]['time']
+        dateStart = t[0]['time'] + datetime.timedelta(minutes=1)
         iq = historicData(dateStart, dateEnd, 60)
 
         stockData = iq.download_symbol(stock)

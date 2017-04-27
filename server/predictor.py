@@ -19,11 +19,11 @@ class annualPredict():
 	def load(self, stockName, period, latest, method = ''):
 		if method == 'SVM':
 			self.modelList = ['oModel', 'hModel', 'lModel', 'vModel', 'cModel']
-		# self.scaler = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+stockName+'normalizeModel')
-		self.scaler = joblib.load('/Users/jingyuan/WorkSpace/SEProject/StockPrediction/Predictor/'+stockName+'normalizeModel')
+		self.scaler = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+stockName+'normalizeModel')
+		# self.scaler = joblib.load('/Users/jingyuan/WorkSpace/SEProject/StockPrediction/Predictor/'+stockName+'normalizeModel')
 		for i in self.modelList:
-			# model = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+method+i+stockName)
-			model = joblib.load('/Users/jingyuan/WorkSpace/SEProject/StockPrediction/Predictor/'+i+stockName)
+			model = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+method+i+stockName)
+			# model = joblib.load('/Users/jingyuan/WorkSpace/SEProject/StockPrediction/Predictor/'+i+stockName)
 			setattr(self, i, model)
 			# print type(i)
 		latest = self.scaler.transform(latest).tolist()
