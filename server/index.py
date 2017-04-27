@@ -27,10 +27,9 @@ mongo = PyMongo(app)
 mongo2 = PyMongo(app, config_prefix='MONGO2')
 # dbClient = MongoClient()
 # db = dbClient.StockRealtime
-priceList = realtimeData.getRealtime()
-# priceList = {'AAPL':{'price':100.00},'BIDU':{'price':100.00},'BABA':{'price':100.00},'YHOO':{'price':100.00},'GOOG':{'price':100.00}}
+priceList = realtimeData.getRealtime() # test: comment these 2 lines
 annualData.getAnnual()
-
+# priceList = {'AAPL':{'price':100.00},'BIDU':{'price':100.00},'BABA':{'price':100.00},'YHOO':{'price':100.00},'GOOG':{'price':100.00}}
 
 @app.route('/home')
 @app.route('/')
@@ -84,15 +83,16 @@ def hisQuery():
 def predict():
 	stockName = str(request.json['stockName'])
 	stock = mongo.db[stockName]
-	latest = stock.find().sort([('date', pymongo.DESCENDING)])[:3]
+	latest = stock.find().sort([('date', pymongo.DESCENDING)])[:5]
 	latest = [[one['high'],one['low'],one['open'],one['close'],one['volume']] for one in latest]
 	
 	prePriceJson = []
 	#period = datePicker -- add module in JS
 	period = int(request.json['datePicker'])
+	method = str(request.json['method'])
 
 	mPredictor = predictor.annualPredict()
-	prePrice = mPredictor.load(stockName, period, latest, '')
+	prePrice = mPredictor.load(stockName, period, latest, method)
 	for i in range(period):
 		dataJson = {}
 		dataJson['high'] = prePrice[2*i][0]
@@ -169,6 +169,8 @@ def dateQuery():
 	print dtsmall, dtlarge
 	stock = mongo2.db[stockName]
 	dateData = list(stock.find({'time':{'$gt':dtsmall, '$lt':dtlarge}}).sort([('time', pymongo.ASCENDING)]))
+	if len(dateData) == 0:
+		return 'VOID'
 	for i in dateData:
 		i['time'] = i['time'].time().strftime('%H:%M')
 	# dateData = [{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344}]

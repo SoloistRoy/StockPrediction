@@ -72,6 +72,26 @@ app.controller('hisController', function ($scope, $http, $filter) {
         {
             name: 'Google (Alphabet Inc.)',
             value: 'GOOG'
+        },
+        {
+            name: 'Chase Corporation',
+            value: 'CCF'
+        },
+        {
+            name: 'Bank of America Corporation',
+            value: 'BAC'
+        },
+        {
+            name: 'Facebook, Inc.',
+            value: 'FB'
+        },
+        {
+            name: 'Twitter, Inc.',
+            value: 'TWTR'
+        },
+        {
+            name: 'New Oriental Education & Technology Group Inc.',
+            value: 'EDU'
         }
     ];
     $scope.indicators = [{
@@ -171,6 +191,9 @@ app.controller('hisController', function ($scope, $http, $filter) {
                                 dateVolume = [0];
                                 dateTime = ["1900-01-01"];
                                 dateData = response.data;
+                                if (dateData == "VOID") {  /////////////////////// In this case, pop a alert instead of a graph///////////////////////////////
+                                    console.log("VOID")
+                                }
                                 console.log('------------------------------------');
                                 console.log(dateData);
                                 console.log('------------------------------------');
@@ -558,6 +581,26 @@ app.controller('preController', function ($scope, $http) {
         {
             name: 'Google (Alphabet Inc.)',
             value: 'GOOG'
+        },
+        {
+            name: 'Chase Corporation',
+            value: 'CCF'
+        },
+        {
+            name: 'Bank of America Corporation',
+            value: 'BAC'
+        },
+        {
+            name: 'Facebook, Inc.',
+            value: 'FB'
+        },
+        {
+            name: 'Twitter, Inc.',
+            value: 'TWTR'
+        },
+        {
+            name: 'New Oriental Education & Technology Group Inc.',
+            value: 'EDU'
         }
     ];
     $scope.terms = [
@@ -581,15 +624,15 @@ app.controller('preController', function ($scope, $http) {
         },
         {
             name: 'SVM',
-            value: 'S'
+            value: 'SVM'
         },
         {
             name: 'ANN',
-            value: 'A'
+            value: 'ANN'
         },
         {
             name: 'Lasso/Ridge',
-            value: 'L'
+            value: ''
         }
     ];
     $scope.inputStockName = $scope.stocks[0];
@@ -760,6 +803,26 @@ app.controller('queryController', function ($scope, $http) {
         {
             name: 'Google (Alphabet Inc.)',
             value: 'GOOG'
+        },
+        {
+            name: 'Chase Corporation',
+            value: 'CCF'
+        },
+        {
+            name: 'Bank of America Corporation',
+            value: 'BAC'
+        },
+        {
+            name: 'Facebook, Inc.',
+            value: 'FB'
+        },
+        {
+            name: 'Twitter, Inc.',
+            value: 'TWTR'
+        },
+        {
+            name: 'New Oriental Education & Technology Group Inc.',
+            value: 'EDU'
         }
     ];
     $scope.inputStockName = $scope.stocks[0];
