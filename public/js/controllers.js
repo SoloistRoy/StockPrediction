@@ -33,13 +33,18 @@ app.controller('mainController', function ($scope, $http) {
 });
 
 app.controller('hisController', function ($scope, $http, $filter) {
-    var stockData, indData,
+    var stockData, indData, dateData,
         stockTime = ["1900-01-01","1900-01-02","1900-01-03","1900-01-04","1900-01-05","1900-01-06"],
         stockPrice = [0,0,0,0,0,0],
         stockPrice2 = [0,0,0,0,0,0],
         indPrice = [0,0,0,0,0,0],
         indTime = ["1900-01-01","1900-01-02","1900-01-03","1900-01-04","1900-01-05","1900-01-06"],
         stockVolume = [0,0,0,0,0,0],
+        dateTime = ["1900-01-01","1900-01-02","1900-01-03","1900-01-04","1900-01-05","1900-01-06"],
+        datePrice = [0,0,0,0,0,0],
+        dateVolume = [0,0,0,0,0,0],
+        overbought = [0,0,0,0,0,0],
+        oversold = [0,0,0,0,0,0],
         clickCount = 0;
 
     //The selector
@@ -98,19 +103,12 @@ app.controller('hisController', function ($scope, $http, $filter) {
     $scope.load = function () {
         $('input[name="daterange"]').daterangepicker({
             "startDate": "02/01/2016",
-            "endDate": "02/01/2017",
+            "endDate": "04/20/2017",
             "minDate": "02/01/2016",
-            "maxDate": "02/01/2017"
+            "maxDate": "04/27/2017"
         }, function (start, end, label) {
             console.log("New date range selected: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD') + ' (predefined range: ' + label + ")");
         });
-        // var ctx = $('#myChart');
-        // // prerender chart
-        // var hisChart = new Chart(ctx, {
-        //     type: 'bar',
-        //     data: chartdata,
-        //     options: options
-        // });
     }; 
    
 
@@ -127,8 +125,8 @@ app.controller('hisController', function ($scope, $http, $filter) {
                         borderColor: '#69b04a',
                         pointBackgroundColor:'#69b04a',
                         backgroundColor:'#69b04a',
-                        pointRadius: 2,
-                        pointBorderColor:'#f9f9f9',
+                        pointRadius: 0.5,
+                        pointBorderColor:'#69b04a',
                         pointHoverBorderWidth: 2,
                         pointHoverRadius: 6,
                         pointHoverBorderColor: '#f9f9f9',
@@ -151,6 +149,47 @@ app.controller('hisController', function ($scope, $http, $filter) {
                         titleFontColor: '#666666',
                         bodyFontColor: '#666666',
                         bodySpacing: 3,
+                    },
+                    onClick: function(e){
+                        var element = this.getElementAtEvent(e);
+                        if(element.length > 0){
+                            var dateDate = stockTime[element[0]._index];
+                            $scope.datetimeDate = dateDate;
+                            $http({
+                                method: 'POST',
+                                url: '/dateQuery',
+                                data: {
+                                    stockName: $scope.stockName.value,
+                                    stockDate: dateDate
+                                }
+                            }).then(function (response) {
+                                console.log(response.data);
+                                $scope.dateTBData = response.data;
+
+                                //Initialize data in each query
+                                datePrice = [0];
+                                dateVolume = [0];
+                                dateTime = ["1900-01-01"];
+                                dateData = response.data;
+                                console.log('------------------------------------');
+                                console.log(dateData);
+                                console.log('------------------------------------');
+                                
+                                for (var i = 0; i < dateData.length; i++) {
+                                    dateTime[i] = dateData[i].time;
+                                    datePrice[i] = dateData[i].price;
+                                    dateVolume[i] = dateData[i].volume;
+                                }
+                                //Update chart
+                                mdlChart.data.datasets[0].data = datePrice;
+                                mdlChart.data.datasets[1].data = dateVolume;
+                                mdlChart.data.labels = dateTime;
+                                mdlChart.update();
+                            }, function (error) {
+                                console.log(error);
+                            });
+                            $('#myModal').modal('show');
+                        }
                     },
                     scales: {
                         xAxes:[{
@@ -197,8 +236,8 @@ app.controller('hisController', function ($scope, $http, $filter) {
                         borderColor: '#00a7ee',
                         pointBackgroundColor:'#00a7ee',
                         backgroundColor:'#00a7ee',
-                        pointRadius: 0,
-                        // pointBorderColor:'#f9f9f9',
+                        pointRadius: 0.5,
+                        pointBorderColor:'#00a7ee',
                         pointHoverBorderWidth: 2,
                         pointHoverRadius: 6,
                         pointHoverBorderColor: '#f9f9f9',
@@ -206,19 +245,53 @@ app.controller('hisController', function ($scope, $http, $filter) {
                     }
                     ,{
                         type: 'line',
-                        label: 'Real Price',
+                        label: 'date Price',
                         fill: false,
                         borderJoinStyle: 'bevel',
                         lineTension: 0,
                         borderColor: '#69b04a',
                         pointBackgroundColor:'#69b04a',
                         backgroundColor:'#69b04a',
-                        pointRadius: 0,
-                        // pointBorderColor:'#f9f9f9',
+                        pointRadius: 0.5,
+                        pointBorderColor:'#69b04a',
                         pointHoverBorderWidth: 2,
                         pointHoverRadius: 6,
                         pointHoverBorderColor: '#f9f9f9',
                         data: [stockPrice2]
+                    },
+                    {
+                        type:'line',
+                        label: 'Overbought',
+                        fill:false,
+                        borderJoinStyle: 'bevel',
+                        lineTension: 0,
+                        borderColor: 'be0712',
+                        pointBackgroundColor:'be0712',
+                        backgroundColor:'#be0712',
+                        pointBorderColor:'#be0712',
+                        pointHoverBorderColor: '#be0712',
+                        pointRadius: 0,
+                        pointHoverBorderWidth: 0,
+                        pointHoverRadius: 0,
+                        data:[overbought],
+                        hidden: true
+                    },
+                    {
+                        type:'line',
+                        label: 'Oversold',
+                        fill:false,
+                        borderJoinStyle: 'bevel',
+                        lineTension: 0,
+                        borderColor: 'fc0d1b',
+                        pointBackgroundColor:'fc0d1b',
+                        backgroundColor:'#fc0d1b',
+                        pointBorderColor:'#fc0d1b',
+                        pointHoverBorderColor: '#fc0d1b',
+                        pointRadius: 0,
+                        pointHoverBorderWidth: 0,
+                        pointHoverRadius: 0,
+                        data:[oversold],
+                        hidden: true
                     }
                     ]
                 };
@@ -253,8 +326,81 @@ app.controller('hisController', function ($scope, $http, $filter) {
                     }
                 };
 
+    var mdlChartdata = {
+                    labels: dateTime,
+                    datasets: [{
+                        type: 'line',
+                        label: 'Price',
+                        yAxisID: 'A',
+                        fill: false,
+                        borderJoinStyle: 'bevel',
+                        lineTension: 0,
+                        borderColor: '#fc0d1b',
+                        pointBackgroundColor:'#fc0d1b',
+                        backgroundColor:'#fc0d1b',
+                        pointRadius: 0.5,
+                        pointBorderColor:'#fc0d1b',
+                        pointHoverBorderWidth: 2,
+                        pointHoverRadius: 6,
+                        pointHoverBorderColor: '#f9f9f9',
+                        data: [datePrice]
+                    },
+                    {
+                        type: 'bar',
+                        label: 'Volume',
+                        yAxisID: 'B',
+                        borderColor: '#a4d9f1',
+                        hoverBorderColor: '#49b2e3',
+                        hoverBorderWidth: 2,
+                        backgroundColor: '#a4d9f1',
+                        data: [dateVolume]
+                    }
+                    ]
+                };
+    var mdlOptions = {
+                    tooltips: {
+                        backgroundColor: 'rgba(245,245,245,0.8)',
+                        titleFontColor: '#666666',
+                        bodyFontColor: '#666666',
+                        bodySpacing: 3,
+                    },
+                    scales: {
+                        xAxes:[{
+                            gridLines:{
+                                display: false
+                            },
+                        }],
+                        yAxes: [{
+                            id: 'A',
+                            type: 'linear',
+                            position: 'left',
+                            gridLines:{
+                                display: false
+                            },
+                            ticks: {
+                                beginAtZero: false
+                            }
+                        },
+                        {
+                            id: 'B',
+                            type: 'linear',
+                            position: 'right',
+                            gridLines:{
+                                display: false
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                        fontFamily: "'Lato', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'"
+                    },
+                    legend: {
+                        display: true
+                    }
+                };
     var ctx = $('#myChart');
     var ctx2 = $('#myChart2');
+    var ctx3 = $('#modalChart')
     // prerender chart
     var hisChart = new Chart(ctx, {
         type: 'bar',
@@ -265,6 +411,11 @@ app.controller('hisController', function ($scope, $http, $filter) {
         type: 'line',
         data: indChartdata,
         options: indOptions
+    });
+    var mdlChart = new Chart(ctx3, {
+        type: 'line',
+        data: mdlChartdata,
+        options: mdlOptions
     });
 
      $scope.load();
@@ -342,14 +493,33 @@ app.controller('hisController', function ($scope, $http, $filter) {
                 indTime[i] = indData[i].date;
                 indPrice[i] = indData[i].close;
             }
-            stockPrice2 = stockPrice.slice(10,stockPrice.length);
-            console.log(stockPrice2);
-            console.log(stockPrice2.length);
+            var N=10;
+            var indPrice2;
+            // stockPrice2 = stockPrice.slice(10,stockPrice.length);
+            indChart.data.datasets[2].hidden = true;
+            indChart.data.datasets[3].hidden = true;
+            if ($scope.indicatorName.value==='SMA')
+                for (var index = 0; index < N; index++) 
+                    indPrice.unshift(null);
+            else if ($scope.indicatorName.value==='RSI') {
+                for (var index = 0; index < 14; index++) 
+                    indPrice.unshift(null);
+                for (var index = 0; index < indPrice.length; index++) {
+                    overbought[index] = 70;
+                    oversold[index] = 30;
+                }
+                indChart.data.datasets[2].hidden = false;
+                indChart.data.datasets[3].hidden = false;
+            }
+            console.log(stockPrice);
+            console.log(stockPrice.length);
             console.log(indPrice.length);
             //Update chart
+            indChart.data.datasets[2].data = overbought;
+            indChart.data.datasets[3].data = oversold;
             indChart.data.datasets[0].data = indPrice;
-            indChart.data.datasets[1].data = stockPrice2;
-            indChart.data.labels = indTime;
+            indChart.data.datasets[1].data = stockPrice;
+            indChart.data.labels = stockTime;
             indChart.update();
             
         }, function (error) {

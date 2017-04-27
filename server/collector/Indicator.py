@@ -8,18 +8,18 @@ def SMA(stock, N):
     print "SMA!!!!!!!!!!!!!!!!!!!!!!!!"
     return [np.mean(stock[i: i + N]) for i in range(len(stock) - N)]
 
-def EMA(stock, N):
+def EMA(closingPrices, N):
     # closingPrices, = get_stock_atrributes_data(stock, ['close'])
     alpha = 2.0 / (N + 1)
-    curEMA = stock[0]
+    curEMA = closingPrices[0]
     res = [curEMA]
-    for p in stock[1:]:
+    for p in closingPrices[1:]:
         curEMA = (1 - alpha) * curEMA + alpha * p
         res.append(curEMA)
-        
     return res
-def RSI(stock, n = 14):
-    prices, = get_stock_atrributes_data(stock, ['close'])
+
+def RSI(prices, n = 14):
+    # prices, = get_stock_atrributes_data(stock, ['close'])
     deltas = np.diff(prices)
     seed = deltas[:n + 1]
     up = seed[seed >= 0].sum() / n

@@ -7488,3 +7488,7 @@ body {
 .btn-customize {
   margin-top: 7px;
 }
+.tableContainer,
+.chartContainer {
+  margin: 15px;
+}

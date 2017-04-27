@@ -10,7 +10,7 @@ import json
 import datetime
 import pymongo
 import predictor
-from collector import realtimeData
+from collector import realtimeData as real
 from collector import annualData
 from collector import Indicator as idc
 
@@ -73,7 +73,7 @@ def hisQuery():
 		i['date'] = temp[0]
 		historicalResult.append(i)
 	historicalData = json_util.dumps(historicalResult)
-	print idc.RSI(stockName), idc.MACD(stockName)
+	# print idc.RSI(stockName), idc.MACD(stockName)
 	return historicalData
 
 @app.route('/getPre', methods=['POST'])
@@ -127,22 +127,22 @@ def indQuery():
 		indResult.append(temp)
 	# Get indicator data
 	N = 10
-	print len(indDateResult)
+	print "stock======----------==================="
+	print len(indResult)
+	print len(indDate)
 	if indName == 'SMA':
 		indDateResult = indDate[N:len(indDate)]
 		idcData = idc.SMA(indResult, N)
 	elif indName == 'EMA':
-		indDateResult = indDate[N+1:len(indDate)]
+		indDateResult = indDate
 		idcData = idc.EMA(indResult, N)
-	else:
-		pass
-	# elif indName == 'EMA':
-	# 	idcData = idc.EMA(indResult, N)
-	# elif indName == 'RSI':
-	# 	idcData = idc.RSI(indResult)
+	elif indName == 'RSI':
+		indDateResult = indDate[N:len(indDate)]
+		idcData = idc.RSI(indResult)
 	# elif indName == 'MACD':
 	# 	idcData = idc.MACD(indResult)
 	print "INDICATOR DATA CALCULATED-----------------------"
+	print len(indDateResult)
 	print len(idcData)
 	idcJson = []
 	for i in range(len(idcData)):
@@ -153,6 +153,16 @@ def indQuery():
 	idcJson = json_util.dumps(idcJson)
 	print "idcJson-------------------"
 	return idcJson
+
+@app.route('/dateQuery', methods=['POST'])
+def dateQuery():
+	stockName = str(request.json['stockName'])
+	stockDate = str(request.json['stockDate'])
+	print stockName, stockDate
+	dateData = [{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344},{'time': '12:00','price':128.9,'volume': 11223344}]
+	print dateData
+	dateData = json_util.dumps(dateData)
+	return dateData
 
 
 if __name__ == '__main__':
