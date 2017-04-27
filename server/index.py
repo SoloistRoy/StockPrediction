@@ -7,6 +7,7 @@ from flask import Flask, render_template, url_for, request, session, redirect, j
 from flask_pymongo import PyMongo
 from bson import json_util
 from pymongo import MongoClient
+from multiprocessing.pool import ThreadPool as Pool
 import json
 import datetime
 import pymongo
@@ -27,23 +28,28 @@ app.config['MONGO2_DBNAME'] = 'StockRealtime'
 mongo = PyMongo(app)
 mongo2 = PyMongo(app, config_prefix='MONGO2')
 
+client = MongoClient()
+clientdb = client.StockRealtime
+
+pool = Pool(10)
+
 def queryRealtime(stock):
-	client = MongoClient()
-	db = client.StockRealtime
-	priceList = []
-	t = list(db[stock].find().sort([('time', pymongo.DESCENDING)]))[0]
+	t = list(clientdb[stock].find().sort([('time', pymongo.DESCENDING)]))[0]
+	# db['YHOO'].aggregate({'$lookup':'from':'GOOG','localField':'price', 'foreignField':'price'})
+	# priceList.append({'name':stock, 'price':t['price']})
 	return {'name':stock, 'price':t['price']}
 
 # dbClient = MongoClient()
 # db = dbClient.StockRealtime
+global priceList
 priceList = []
 stockList = ['YHOO', 'GOOG', 'AAPL', 'CCF', 'BAC', 'FB', 'TWTR', 'BIDU', 'BABA', 'EDU']
 try:
 	realtimeData.getRealtime() # test: comment these  lines
 except:
 	pass
-for i in stockList:
-	priceList.append(queryRealtime(i))
+# for i in stockList:
+# 	priceList.append(pool.apply_async(queryRealtime, (i,)))
 try:
 	annualData.getAnnual()
 except:
@@ -58,7 +64,8 @@ def getRealTime():
 	except:
 		pass
 	for i in stockList:
-		priceList.append(queryRealtime(i))
+		res = pool.apply_async(queryRealtime, (i,))
+		priceList.append(res.get())
 	priceList = json_util.dumps(priceList)
 	return priceList
 

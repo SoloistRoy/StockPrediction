@@ -32,7 +32,7 @@ app.controller('mainController', function ($scope, $interval, $http) {
         }, function(error) {
             console.log(error);
         });
-    }, 30000);
+    }, 55000);
     //Test module
     $scope.stockPrice = "Stock Price";
     $scope.buttonClicked = function () {
