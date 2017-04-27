@@ -166,6 +166,7 @@ def dateQuery():
 	stockName = str(request.json['stockName'])
 	stockDate = str(request.json['stockDate'])
 	print stockName, stockDate
+
 	stockDate = stockDate.split('-')
 	dtsmall = datetime.datetime(int(stockDate[0]), int(stockDate[1]), int(stockDate[2]), 0, 0,)
 	dtlarge = dtsmall+datetime.timedelta(1)
@@ -188,12 +189,13 @@ def queQuery():
 	average = dbm.get_ave_price_last_one_year(stockName)
 	lowest = dbm.get_lowest_price_last_one_year(stockName)
 	companies = dbm.get_stock_ave_price_lower_than_lowest_price_selected_stock(stockName)
+
 	print companies
-	data = [highest,average,lowest]
-	eve = ['Highest stock price in the last ten days','Average stock price in the last one year','Lowest stock price in the last ten days']
+	data = [highest,average,lowest,companies]
+	eve = ['Highest stock price in the last ten days','Average stock price in the last one year','Lowest stock price in the last ten days', 'Companies who have the average stock price lower than the lowest of the selected company in the last one year']
 	
 	resData = []
-	for i in range(3):
+	for i in range(4):
 		dataJson = {}
 		dataJson['event'] = eve[i]
 		dataJson['value'] = data[i]

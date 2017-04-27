@@ -191,6 +191,7 @@ app.controller('hisController', function ($scope, $http, $filter) {
                                 dateVolume = [0];
                                 dateTime = ["1900-01-01"];
                                 dateData = response.data;
+
                                 if (dateData == "VOID") {  /////////////////////// In this case, pop a alert instead of a graph///////////////////////////////
                                     console.log("VOID")
                                 }
