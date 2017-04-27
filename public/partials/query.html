@@ -1,0 +1,46 @@
+<!--
+written by: Jingyuan Li
+assisted by:
+debugged by: Jingyuan Li
+-->
+<div ng-controller="queryController">
+    <br>
+	<div class="row">
+        <div class="col-lg-3">
+            <select class="form-control" ng-model="inputStockName" ng-options="stock.name disable when stock.notAnOption for stock in stocks"></select>
+        </div>
+        <div class="col-lg-2">
+            <button type="submit" class="btn btn-sm btn-primary btn-customize" ng-click="Query()">get statistics</button>
+        </div>
+    </div>
+    <hr>
+    <h4>Real Time Data</h4>
+    <div class="row">
+        <table class="table table-striped table-hover">
+            <tbody>
+                <tr ng-repeat="x in realData">
+                    <td>//x.name//</td>
+                    <td>//x.price//</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <hr>
+    <h4>Statistics of //inputStockName.name//</h4>
+    <p class="text-muted"><small>Currency in USD</small></p>
+    <div class="row">
+        <table class="table table-striped table-hover">
+            <tbody>
+                <tr ng-repeat="x in statisticData">
+                    <td>//x.event//</td>
+                    <td>//x.value//</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <hr>
+    <h4>Avg. price lower than the lowerst of //inputStockName.name//</h4>
+    <div class="row">
+
+    </div>
+</div>
