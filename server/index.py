@@ -27,8 +27,11 @@ mongo = PyMongo(app)
 mongo2 = PyMongo(app, config_prefix='MONGO2')
 # dbClient = MongoClient()
 # db = dbClient.StockRealtime
-priceList = realtimeData.getRealtime() # test: comment these 2 lines
-annualData.getAnnual()
+priceList = realtimeData.getRealtime() # test: comment these  lines
+try:
+	annualData.getAnnual()
+except:
+	pass
 # priceList = {'AAPL':{'price':100.00},'BIDU':{'price':100.00},'BABA':{'price':100.00},'YHOO':{'price':100.00},'GOOG':{'price':100.00}}
 
 @app.route('/home')
