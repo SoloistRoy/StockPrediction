@@ -34,8 +34,10 @@ class shortTerm():
 
 	def multi(self, stock, sLatest):
 		# sScaler = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+stock+'normalize')
-		cModel = joblib.load('G:\Python\Web\StockPrediction\Predictor\classifier'+stock)
-		sModel = joblib.load('G:\Python\Web\StockPrediction\Predictor\short'+stock)
+		cModel = joblib.load('/Users/jingyuan/WorkSpace/SEProject/StockPrediction/Predictor/classifier'+stock)
+		sModel = joblib.load('/Users/jingyuan/WorkSpace/SEProject/StockPrediction/Predictor/short'+stock)
+		# cModel = joblib.load('G:\Python\Web\StockPrediction\Predictor\classifier'+stock)
+		# sModel = joblib.load('G:\Python\Web\StockPrediction\Predictor\short'+stock)
 		# sLatest = sScaler.transform(sLatest).tolist()
 		print sLatest
 		l = []
@@ -50,7 +52,7 @@ class annualPredict():
 		self.scaler = None
 
 	def load(self, stockName, period, latest, method = ''):
-		if method == 'SVM':
+		if method == 'SVM' or method == 'Bayes':
 			self.modelList = ['oModel', 'hModel', 'lModel', 'vModel', 'cModel']
 		# self.scaler = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+stockName+'normalizeModel')
 		self.scaler = joblib.load('/Users/jingyuan/WorkSpace/SEProject/StockPrediction/Predictor/'+stockName+'normalizeModel')

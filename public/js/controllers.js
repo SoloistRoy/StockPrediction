@@ -8,61 +8,54 @@ var app = angular.module('main', ['ngRoute', 'chart.js']);
 app.config(function ($interpolateProvider) {
     $interpolateProvider.startSymbol('//').endSymbol('//');
 });
-
-app.controller('mainController', function ($scope, $interval, $http, $rootScope) {
-    // Get real time data
-    // $rootScope.$on('$routeChangeStart', function (next, last) {
-    //     $http({
-    //         method: 'GET',
-    //         url: '/realTime'
-    //     }).then(function(response) {
-    //         console.log(response);
-    //         $scope.realData = response.data;
-    //     }, function(error) {
-    //         console.log(error);
-    //     });
-    //     console.log("getdata!");
-    // });
-    var getdata;
-    $http({
-            method: 'GET',
-            url: '/realTime'
-        }).then(function(response) {
-            console.log(response);
-            $scope.realData = response.data;
-        }, function(error) {
-            console.log(error);
-        });
-    getdata = $interval(function() {
-        $http({
-            method: 'GET',
-            url: '/realTime'
-        }).then(function(response) {
-            console.log(response);
-            $scope.realData = response.data;
-        }, function(error) {
-            console.log(error);
-        });
-    }, 55000);
-    //Test module
-    $scope.stockPrice = "Stock Price";
-    $scope.buttonClicked = function () {
-        $http({
-                method: 'POST',
-                url: '/query',
-                data: {
-                    stockName: $scope.inputStockName
-                }
-            }).then(function(response) {
-                console.log(response);
-                // pass data in json, a[0]: one piece, a[1]: json data
-                var dataSet = response.data;
-                var data = dataSet[1]
-                $scope.stockPrice = data;
-            }, function(error) {
-                console.log(error);
-            });
+function findCompany(params) {
+        if (params==='AAPL') return 'Apple Inc. (AAPL)'
+        else if (params==='BABA') return 'Alibaba Group (BABA)'
+        else if (params==='BIDU') return 'Baidu, Inc. (BIDU)'
+        else if (params==='YHOO') return 'Yahoo! Inc. (YHOO)'
+        else if (params==='GOOG') return 'Google (Alphabet Inc.) (GOOG)'
+        else if (params==='CCF') return 'Chase Corporation (CCF)'
+        else if (params==='BAC') return 'Bank of America Corporation (BAC)'
+        else if (params==='FB') return 'Facebook, Inc. (FB)'
+        else if (params==='TWTR') return 'Twitter, Inc. (TWTR)'
+        else if (params==='EDU') return 'New Oriental Education & Technology Group Inc. (EDU)'
     }
+
+ 
+app.controller('mainController', function ($scope, $interval, $http) {
+    // Get real time data
+    console.log("called");
+        $http({
+            method: 'GET',
+            url: '/realTime'
+        }).then(function(response) {
+            var data = response.data;
+            for (var index = 0; index < data.length; index++) {
+                var company = data[index].name;
+                data[index].name = findCompany(company);
+            }
+            console.log(response);
+            $scope.realData = data;
+        }, function(error) {
+            console.log(error);
+        });
+    $interval(function() {
+     console.log("called");
+        $http({
+            method: 'GET',
+            url: '/realTime'
+        }).then(function(response) {
+            var data = response.data;
+            for (var index = 0; index < data.length; index++) {
+                var company = data[index].name;
+                data[index].name = findCompany(company);
+            }
+            console.log(response);
+            $scope.realData = data;
+        }, function(error) {
+            console.log(error);
+        });
+    }, 20000);
 
 });
 
@@ -554,6 +547,7 @@ app.controller('hisController', function ($scope, $http, $filter) {
                 dateRange: $scope.dateRange1
             }
         }).then(function (response) {
+            $("html, body").animate({ scrollTop: 800 }, 1000);
             //Initialize data in each query
             indPrice = [0];
             // stockVolume = [0];
@@ -691,7 +685,7 @@ app.controller('preController', function ($scope, $http) {
         },
         {
             name: 'Bayesian Curve Fitting',
-            value: 'BCF'
+            value: 'Bayes'
         }
     ];
     $scope.inputStockName = $scope.stocks[0];
@@ -807,7 +801,19 @@ app.controller('preController', function ($scope, $http) {
                 }
             }).then(function(response) {
                 $("html, body").animate({ scrollTop: 770 }, 1000);
-                $scope.tableData = response.data;
+                var data = response.data;
+                for (var index = 0; index < data.length; index++) {
+                    var company = data[index].name;
+                    data[index].name = findCompany(company);
+                    if (data[index].trend==1) {
+                        data[index].trend = ['','Buy it today!',' The price would rise!'];
+                        
+                }
+                    else 
+                        data[index].trend = ['Sell it today!','',' The price would fall! '];
+                }
+                console.log(data[1]);
+                $scope.tableData = data;
             }, function(error) {
                 console.log(error);
             });
@@ -823,7 +829,7 @@ app.controller('preController', function ($scope, $http) {
                 }
             }).then(function(response) {
 
-                $("html, body").animate({ scrollTop: 78 }, 500);
+                $("html, body").animate({ scrollTop: 107 }, 500);
                 //Initialize data in each query
                 stockPrice = [0];
                 stockVolume = [0];
@@ -857,18 +863,7 @@ app.controller('preController', function ($scope, $http) {
 });
 
 app.controller('queryController', function ($scope, $http) {
-    function findCompany(params) {
-        if (params==='AAPL') return 'Apple Inc. (AAPL)'
-        else if (params==='BABA') return 'Alibaba Group (BABA)'
-        else if (params==='BIDU') return 'Baidu, Inc. (BIDU)'
-        else if (params==='YHOO') return 'Yahoo! Inc. (YHOO)'
-        else if (params==='GOOG') return 'Google (Alphabet Inc.) (GOOG)'
-        else if (params==='CCF') return 'Chase Corporation (CCF)'
-        else if (params==='BAC') return 'Bank of America Corporation (BAC)'
-        else if (params==='FB') return 'Facebook, Inc. (FB)'
-        else if (params==='TWTR') return 'Twitter, Inc. (TWTR)'
-        else if (params==='EDU') return 'New Oriental Education & Technology Group Inc. (EDU)'
-    }
+    
     var staData;
     //The selector
     $scope.stocks = [{

@@ -16,9 +16,10 @@ from collector import realtimeData
 from collector import annualData
 from collector import Indicator as idc
 from collector import DBManager as dbm
+from collector import GoogleFinance as gf
 
-app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
-# app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
+# app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
+app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
 app.config['MONGO_DBNAME'] = 'StockAnnual'
 app.config['MONGO_URI'] = 'mongodb://localhost/StockAnnual'
 app.config['SECRET_KEY'] = 'super secret key'
@@ -55,19 +56,36 @@ try:
 except:
 	pass
 
+# @app.route('/realTime', methods=['GET'])
+# def getRealTime():
+# 	# priceList = [{'name': 'AAPL','price':100.00},{'name':'BIDU','price':100.00},{'name':'BABA','price':100.00},{'name':'YHOO','price':100.00},{'name':'GOOG','price':100.00}]
+# 	priceList = []
+# 	try:
+# 		realtimeData.getRealtime()
+# 	except:
+# 		pass
+# 	for i in stockList:
+# 		res = pool.apply_async(queryRealtime, (i,))
+# 		priceList.append(res.get())
+# 	priceList = json_util.dumps(priceList)
+# 	return priceList
+
 @app.route('/realTime', methods=['GET'])
 def getRealTime():
-	# priceList = [{'name': 'AAPL','price':100.00},{'name':'BIDU','price':100.00},{'name':'BABA','price':100.00},{'name':'YHOO','price':100.00},{'name':'GOOG','price':100.00}]
-	priceList = []
-	try:
-		realtimeData.getRealtime()
-	except:
-		pass
-	for i in stockList:
-		res = pool.apply_async(queryRealtime, (i,))
-		priceList.append(res.get())
-	priceList = json_util.dumps(priceList)
-	return priceList
+	stockList = ['YHOO', 'GOOGL', 'AAPL', 'NYSEMKT:CCF', 'BAC', 'FB', 'TWTR', 'BIDU', 'BABA', 'EDU']
+	stockList2 = ['YHOO', 'GOOG', 'AAPL', 'CCF', 'BAC', 'FB', 'TWTR', 'BIDU', 'BABA', 'EDU']
+	price = gf.get_quote(stockList)
+	print "------------------------"
+	priceJson = []
+	for i in range(len(stockList)):
+		dataJson = {}
+		dataJson['name'] = stockList2[i]
+		dataJson['price'] = price[i]
+		priceJson.append(dataJson)
+	priceJson = json_util.dumps(priceJson)
+	return priceJson
+
+
 
 @app.route('/home')
 @app.route('/')

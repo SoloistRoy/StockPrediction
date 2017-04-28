@@ -4,9 +4,8 @@ assisted by:
 debugged by: Jingyuan Li
 -->
 <!-- Main component for a primary marketing message or call to action -->
-<div ng-controller="preController">
+<div>
     <br>
-    <div class="row container-fluid" ><h4>Long Term Prediction</h4></div>
 	<div class="row">
         <div class="col-lg-3">
             <select class="form-control" ng-model="inputStockName" ng-options="stock.name disable when stock.notAnOption for stock in stocks"></select>
@@ -21,6 +20,8 @@ debugged by: Jingyuan Li
             <button type="submit" class="btn btn-sm btn-primary btn-customize" ng-click="preQuery()">get price</button>
         </div>
     </div>
+    <hr>
+    <div class="row container-fluid" ><h4>Long Term Prediction</h4></div>
     <br>
     <div class="row">
         <canvas id="myChart"></canvas>
@@ -37,11 +38,12 @@ debugged by: Jingyuan Li
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="x in tableData">
-                    <td>//x.date//</td>
-                    <td>//x.open//</td>
-                    <td>//x.high//</td>
+                <tr ng-repeat="x in tableData" >
+                    <td>//x.name//</td>
+                    <td>//x.price//</td>
+                    <td><span class="text-danger">//x.trend[0]//</span><span class="text-success">//x.trend[1]//</span>//x.trend[2]//</td>
                 </tr>
+                
             </tbody>
         </table>
     </div>
