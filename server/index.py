@@ -7,6 +7,7 @@ from flask import Flask, render_template, url_for, request, session, redirect, j
 from flask_pymongo import PyMongo
 from bson import json_util
 from pymongo import MongoClient
+from multiprocessing.pool import ThreadPool as Pool
 import json
 import datetime
 import pymongo
@@ -16,8 +17,8 @@ from collector import annualData
 from collector import Indicator as idc
 from collector import DBManager as dbm
 
-# app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
-app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
+app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
+# app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
 app.config['MONGO_DBNAME'] = 'StockAnnual'
 app.config['MONGO_URI'] = 'mongodb://localhost/StockAnnual'
 app.config['SECRET_KEY'] = 'super secret key'
@@ -27,27 +28,32 @@ app.config['MONGO2_DBNAME'] = 'StockRealtime'
 mongo = PyMongo(app)
 mongo2 = PyMongo(app, config_prefix='MONGO2')
 
+client = MongoClient()
+clientdb = client.StockRealtime
+
+pool = Pool(10)
+
 def queryRealtime(stock):
-	client = MongoClient()
-	db = client.StockRealtime
-	priceList = []
-	t = list(db[stock].find().sort([('time', pymongo.DESCENDING)]))[0]
+	t = list(clientdb[stock].find().sort([('time', pymongo.DESCENDING)]))[0]
+	# db['YHOO'].aggregate({'$lookup':'from':'GOOG','localField':'price', 'foreignField':'price'})
+	# priceList.append({'name':stock, 'price':t['price']})
 	return {'name':stock, 'price':t['price']}
 
 # dbClient = MongoClient()
 # db = dbClient.StockRealtime
-# priceList = []
+global priceList
+priceList = []
 stockList = ['YHOO', 'GOOG', 'AAPL', 'CCF', 'BAC', 'FB', 'TWTR', 'BIDU', 'BABA', 'EDU']
-# try:
-# 	realtimeData.getRealtime() # test: comment these  lines
-# except:
-# 	pass
+try:
+	realtimeData.getRealtime() # test: comment these  lines
+except:
+	pass
 # for i in stockList:
-# 	priceList.append(queryRealtime(i))
-# try:
-# 	annualData.getAnnual()
-# except:
-# 	pass
+# 	priceList.append(pool.apply_async(queryRealtime, (i,)))
+try:
+	annualData.getAnnual()
+except:
+	pass
 
 @app.route('/realTime', methods=['GET'])
 def getRealTime():
@@ -58,7 +64,8 @@ def getRealTime():
 	except:
 		pass
 	for i in stockList:
-		priceList.append(queryRealtime(i))
+		res = pool.apply_async(queryRealtime, (i,))
+		priceList.append(res.get())
 	priceList = json_util.dumps(priceList)
 	return priceList
 
@@ -109,6 +116,16 @@ def hisQuery():
 	historicalData = json_util.dumps(historicalResult)
 	# print idc.RSI(stockName), idc.MACD(stockName)
 	return historicalData
+
+@app.route('/shortTerm', methods=['POST'])
+def shortTerm():
+	mPredictor = predictor.shortTerm()
+	res = mPredictor.shortTermPredictor()
+	print '-------------------------------------------'
+	print res
+	print '------------------------------------------'
+	return json_util.dumps(res)
+
 
 @app.route('/getPre', methods=['POST'])
 def predict():
