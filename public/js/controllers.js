@@ -433,6 +433,10 @@ app.controller('hisController', function ($scope, $http, $filter) {
                             gridLines:{
                                 display: false
                             },
+                            ticks: {
+                                autoSkip: true,
+                                autoSkipPadding: 10
+                            }
                         }],
                         yAxes: [{
                             id: 'A',
@@ -648,6 +652,10 @@ app.controller('preController', function ($scope, $http) {
     ];
     $scope.terms = [
         {
+            name: '1 Day',
+            value: 1
+        },
+        {
             name: '5 Day',
             value: 5
         },
@@ -658,6 +666,10 @@ app.controller('preController', function ($scope, $http) {
         {
             name: '15 Day',
             value: 15
+        },
+        {
+            name: '30 Day',
+            value: 30
         }
     ];
     $scope.methods = [{
@@ -676,6 +688,10 @@ app.controller('preController', function ($scope, $http) {
         {
             name: 'Lasso/Ridge',
             value: ''
+        },
+        {
+            name: 'Bayesian Curve Fitting',
+            value: 'BCF'
         }
     ];
     $scope.inputStockName = $scope.stocks[0];
@@ -775,9 +791,29 @@ app.controller('preController', function ($scope, $http) {
             return false;
         });
 
-    $scope.prediction = "Prediction";
     $scope.preQuery = function () {
-        $http({
+        console.log('------------------------------------');
+        console.log($scope.inputPredictTerm.value);
+        console.log('------------------------------------');
+        if ($scope.inputPredictTerm.value == 1) {
+
+            $http({
+                method: 'POST',
+                url: '/shortTerm',
+                data: {
+                    stockName: $scope.inputStockName.value,
+                    datePicker: $scope.inputPredictTerm.value,
+                    method: $scope.inputPredictMethod.value
+                }
+            }).then(function(response) {
+                $("html, body").animate({ scrollTop: 770 }, 1000);
+                $scope.tableData = response.data;
+            }, function(error) {
+                console.log(error);
+            });
+        }
+        else {
+            $http({
                 method: 'POST',
                 url: '/getPre',
                 data: {
@@ -786,13 +822,13 @@ app.controller('preController', function ($scope, $http) {
                     method: $scope.inputPredictMethod.value
                 }
             }).then(function(response) {
-                $("html, body").animate({ scrollTop: 97 }, 500);
+
+                $("html, body").animate({ scrollTop: 78 }, 500);
                 //Initialize data in each query
                 stockPrice = [0];
                 stockVolume = [0];
                 stockTime = ["1900-01-01"];
                 stockData = response.data;
-                $scope.tableData = response.data;
                 console.log('------------stockData---------------');
                 console.log(stockData);
                 console.log('------------------------------------');
@@ -812,10 +848,11 @@ app.controller('preController', function ($scope, $http) {
                 hisChart.update();
 
                 console.log(response.data);
-                $scope.prediction = response.data;
             }, function(error) {
                 console.log(error);
             });
+        }
+        
     }
 });
 

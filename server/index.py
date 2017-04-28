@@ -36,18 +36,18 @@ def queryRealtime(stock):
 
 # dbClient = MongoClient()
 # db = dbClient.StockRealtime
-priceList = []
+# priceList = []
 stockList = ['YHOO', 'GOOG', 'AAPL', 'CCF', 'BAC', 'FB', 'TWTR', 'BIDU', 'BABA', 'EDU']
-try:
-	realtimeData.getRealtime() # test: comment these  lines
-except:
-	pass
-for i in stockList:
-	priceList.append(queryRealtime(i))
-try:
-	annualData.getAnnual()
-except:
-	pass
+# try:
+# 	realtimeData.getRealtime() # test: comment these  lines
+# except:
+# 	pass
+# for i in stockList:
+# 	priceList.append(queryRealtime(i))
+# try:
+# 	annualData.getAnnual()
+# except:
+# 	pass
 
 @app.route('/realTime', methods=['GET'])
 def getRealTime():
