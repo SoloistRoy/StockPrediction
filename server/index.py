@@ -17,8 +17,8 @@ from collector import annualData
 from collector import Indicator as idc
 from collector import DBManager as dbm
 
-# app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
-app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
+app = Flask('StockAnnual', template_folder = 'G:\Python\Web\StockPrediction',static_folder='G:\Python\Web\StockPrediction')
+# app = Flask('StockAnnual', template_folder = '/Users/jingyuan/WorkSpace/SEProject/StockPrediction',static_folder='/Users/jingyuan/WorkSpace/SEProject/StockPrediction')
 app.config['MONGO_DBNAME'] = 'StockAnnual'
 app.config['MONGO_URI'] = 'mongodb://localhost/StockAnnual'
 app.config['SECRET_KEY'] = 'super secret key'
@@ -116,6 +116,16 @@ def hisQuery():
 	historicalData = json_util.dumps(historicalResult)
 	# print idc.RSI(stockName), idc.MACD(stockName)
 	return historicalData
+
+@app.route('/shortTerm', methods=['POST'])
+def shortTerm():
+	mPredictor = predictor.shortTerm()
+	res = mPredictor.shortTermPredictor()
+	print '-------------------------------------------'
+	print res
+	print '------------------------------------------'
+	return json_util.dumps(res)
+
 
 @app.route('/getPre', methods=['POST'])
 def predict():
