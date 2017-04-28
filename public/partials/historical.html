@@ -11,7 +11,6 @@ debugged by: Jingyuan Li
         </div>
         <div class="col-lg-3">
             <div class="input-group">
-            <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ To today ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
                 <input type="text" name="daterange" class="form-control" placeholder="01/01/2016 - 04/27/2017" id="date1" ng-model="dateRange1"/>
                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
             </div>
@@ -72,8 +71,9 @@ debugged by: Jingyuan Li
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title">//stockName.name//</h4>
-            <h5>//realtimeDate//</h5>
+            <h5>//datetimeDate//</h5>
         </div>
+        <hr>
         <div class="modal-body">
             <div class="row">
                 <div class="chartContainer">
@@ -101,12 +101,11 @@ debugged by: Jingyuan Li
                     </tbody>
                 </table>
                 </div>
-                
             </div>
         </div>
+        <button class="btn btn-sm btn-primary floatbtn" value="Scroll Top"  style="display:none">Scroll Top</button>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-            <!--<button type="button" class="btn btn-primary">Save changes</button>-->
         </div>
         </div>
     </div>
