@@ -10,6 +10,39 @@ from sklearn import preprocessing
 import copy
 import datetime
 import time
+import pymongo
+from pymongo import MongoClient
+from multiprocessing.pool import ThreadPool as Pool
+
+class shortTerm():
+	def __init__(self):
+		self.client = MongoClient()
+		self.clientdb = self.client.StockAnnual
+
+	def shortTermPredictor(self):
+		res = []
+		stockList = ['YHOO', 'GOOG', 'AAPL', 'CCF', 'BAC', 'FB', 'TWTR', 'BIDU', 'BABA', 'EDU']
+		pool = Pool(10)
+		for stock in stockList:
+			sLatest = list(self.clientdb[stock].find().sort([('time', pymongo.DESCENDING)]))[:3]
+			print sLatest
+			temp = pool.apply_async(self.multi, (stock, sLatest,))
+			t = temp.get()
+			print t
+			res.append(t)
+		return res
+
+	def multi(self, stock, sLatest):
+		# sScaler = joblib.load('G:\Python\Web\StockPrediction\Predictor/'+stock+'normalize')
+		cModel = joblib.load('G:\Python\Web\StockPrediction\Predictor\classifier'+stock)
+		sModel = joblib.load('G:\Python\Web\StockPrediction\Predictor\short'+stock)
+		# sLatest = sScaler.transform(sLatest).tolist()
+		print sLatest
+		l = []
+		for i in sLatest:
+			i = [i['high'],i['low'],i['open'],i['close']]
+			l.append(i)
+		return {'name':stock, 'price':sModel.predict(i).tolist()[0], 'trend':cModel.predict(i).tolist()[0]}
 
 class annualPredict():
 	def  __init__(self):
